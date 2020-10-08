@@ -1,11 +1,11 @@
 import React, { Component } from 'react';
 
-interface DashProps {
+interface AdminProps {
 	clearToken: any;
 }
 
-class Dashboard extends React.Component<DashProps> {
-	constructor(props: DashProps){
+class Admin extends React.Component<AdminProps> {
+	constructor(props: AdminProps){
 		super(props);
 		this.state = {
 
@@ -14,11 +14,11 @@ class Dashboard extends React.Component<DashProps> {
 	render(){
 		return(
 			<div>
-				<h1>This is the Dashboard!!!</h1>
+				<h1>This is the Admin Portal!!!</h1>
 				<button onClick={this.props.clearToken}>Logout</button>
 			</div>
 		)
 	}
 }
 
-export default Dashboard;
+export default Admin;
