@@ -4,8 +4,6 @@ import { Redirect } from 'react-router-dom';
 const Regex = RegExp(/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/);
 
 interface AuthProps {
-	// name?: any;
-	// value?: any;
 	updateToken: any;
 	clearToken: any;
  }
@@ -26,8 +24,7 @@ interface AuthProps {
 		beginCheckingAmount: string,
 		beginSavingsAmount: string,
 		signin: string,
-	},
-
+	}
  }
 
 class Auth extends React.Component<AuthProps, AuthState> {
@@ -75,8 +72,6 @@ class Auth extends React.Component<AuthProps, AuthState> {
 		else if(this.state.inputType === 'text'){
 			this.setState({inputType: 'password'});
 		}
-
-		
 	}
 	handleChange = (event : any) => {
 		event.preventDefault();
@@ -97,7 +92,6 @@ class Auth extends React.Component<AuthProps, AuthState> {
 				break;
 		}
 		this.setState(Object.assign(this.state, { errors, [name]: value}));
-		// console.log(this.state.errors);
 	}
 	handleSubmit = (event: any) => {
 		event.preventDefault();
@@ -107,12 +101,10 @@ class Auth extends React.Component<AuthProps, AuthState> {
 		);
 		if(valid === true){
 			let userObject = {
-			firstName: this.state.firstName,
-			lastName: this.state.lastName,
-			beginCheckingAmount: this.state.beginCheckingAmount,
-			beginSavingsAmount: this.state.beginSavingsAmount,
-			email: this.state.email,
-			password: this.state.password,
+				firstName: this.state.firstName,
+				lastName: this.state.lastName,
+				email: this.state.email,
+				password: this.state.password,
 			};
 			let url = this.state.login === true 
 			? 'http://localhost:4000/user/login'
@@ -126,21 +118,34 @@ class Auth extends React.Component<AuthProps, AuthState> {
 			})
 			.then((res) => res.json())
 			.then((data) => {
-				this.props.updateToken(data.sessionToken, data.user.admin);
+				this.props.updateToken(data.sessionToken, data.user.admin, data.user.id);
+				let userAmount = {
+					checking: this.state.beginCheckingAmount,
+					savings: this.state.beginSavingsAmount,
+				};
+				fetch('http://localhost:4000/beginBalance/create', {
+					method: "POST",
+					headers: new Headers({
+						"Authorization": data.sessionToken,
+						"Content-Type": "application/json",
+					}),
+					body: JSON.stringify(userAmount),
+				})
 				console.log(data.sessionToken);
 				console.log(data.user.admin);
+				console.log(data.user.id);
 
 			})
 			.catch((err) => console.log(err));
 		}
 		else{
-			   console.log("Authentication Error!!!")
-			   this.setState({firstName: ''});
-			   this.setState({lastName: ''});
-			   this.setState({beginCheckingAmount: 0});
-			   this.setState({beginSavingsAmount: 0});
-			   this.setState({email: ''});
-			   this.setState({password: ''});
+			console.log("Authentication Error!!!")
+			this.setState({firstName: ''});
+			this.setState({lastName: ''});
+			this.setState({beginCheckingAmount: 0});
+			this.setState({beginSavingsAmount: 0});
+			this.setState({email: ''});
+			this.setState({password: ''});
 		}
 	}
 
