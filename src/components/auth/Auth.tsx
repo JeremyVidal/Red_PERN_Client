@@ -131,9 +131,9 @@ class Auth extends React.Component<AuthProps, AuthState> {
 					}),
 					body: JSON.stringify(userAmount),
 				})
-				console.log(data.sessionToken);
-				console.log(data.user.admin);
-				console.log(data.user.id);
+				// console.log(data.sessionToken);
+				// console.log(data.user.admin);
+				// console.log(data.user.id);
 
 			})
 			.catch((err) => console.log(err));

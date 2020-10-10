@@ -1,5 +1,4 @@
 import React from 'react';
-import NavBar from '../site/NavBar';
 
 interface DashProps {
 	userid: number,
@@ -21,8 +20,8 @@ class Dashboard extends React.Component<DashProps, DashState> {
 			savings: [],
 		}
 		// this.getChecking = this.getChecking.bind(this);
-
 	}
+
 	componentDidMount = () => {
 		fetch('http://localhost:4000/checking', {
 			method: "GET",
@@ -33,7 +32,7 @@ class Dashboard extends React.Component<DashProps, DashState> {
 		})
 		.then((res) => res.json())
 		.then((data) => {
-			console.log(data);
+			// console.log(data);
 			this.setState({user_id: this.props.userid})
 			this.setState({checking: [ ...this.state.checking, ...data ]})			  
 		})
@@ -47,7 +46,7 @@ class Dashboard extends React.Component<DashProps, DashState> {
 		})
 		.then((res) => res.json())
 		.then((data) => {
-			console.log(data);
+			// console.log(data);
 			this.setState({savings: [ ...this.state.savings, ...data ]})			  
 		})
 	}
@@ -56,29 +55,56 @@ class Dashboard extends React.Component<DashProps, DashState> {
 		return(
 			<div>
 				<h1>This is the Dashboard!!!</h1>
-				<h2>User Id: {this.props.userid}</h2>
+					<h2>Checking</h2>
 					<table>
 						<thead>
-							<tr><th>Name</th><th>Amount</th></tr>
+							<tr>
+								<th>Date</th>
+								<th>Time</th>
+								<th>Category</th>
+								<th>Type</th>
+								<th>Name</th>
+								<th>Description</th>
+								<th>Amount</th>
+							</tr>
 						</thead>
 						<tbody>
 							{this.state.checking.map((data, i) => (
 							<tr key={i}>
+								<td>{data.checkingDate}</td>
+								<td>{data.checkingTime}</td>
+								<td>{data.checkingCategory}</td>
+								<td>{data.checkingType}</td>
 								<td>{data.checkingName}</td>
+								<td>{data.checkingDescription}</td>
 								<td>${data.checkingAmount}</td>
 							</tr>
 							))}	
 						</tbody>
 					</table>
 					<hr />
+					<h2>Savings</h2>
 					<table>
 						<thead>
-							<tr><th>Name</th><th>Amount</th></tr>
+							<tr>
+								<th>Date</th>
+								<th>Time</th>
+								<th>Category</th>
+								<th>Type</th>
+								<th>Name</th>
+								<th>Description</th>
+								<th>Amount</th>
+							</tr>
 						</thead>
 						<tbody>
 							{this.state.savings.map((data, i) => (
 							<tr key={i}>
+								<td>{data.savingsDate}</td>
+								<td>{data.savingsTime}</td>
+								<td>{data.savingsCategory}</td>
+								<td>{data.savingsType}</td>
 								<td>{data.savingsName}</td>
+								<td>{data.savingsDescription}</td>
 								<td>${data.savingsAmount}</td>
 							</tr>
 							))}	

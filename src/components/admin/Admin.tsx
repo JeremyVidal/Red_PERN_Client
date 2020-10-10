@@ -1,7 +1,7 @@
 import React from 'react';
 
 interface AdminProps {
-	userid: number,
+	clearToken: any;
 	token: string,
 }
 
@@ -16,6 +16,8 @@ class Admin extends React.Component<AdminProps> {
 		return(
 			<div>
 				<h1>This is the Admin Portal!!!</h1>
+				<button onClick={this.props.clearToken}>Logout</button>
+
 			</div>
 		)
 	}
