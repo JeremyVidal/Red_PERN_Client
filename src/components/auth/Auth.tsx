@@ -1,67 +1,322 @@
-import React, { Component } from 'react';
-import {
-	Container,
-	Form,
-	FormGroup,
-	Label,
-	Input,
-	Button,
-  } from "reactstrap";
+import React from 'react';
+import { Redirect } from 'react-router-dom';
+import { withStyles, createStyles, WithStyles, Theme } from '@material-ui/core/styles';
+import Avatar from '@material-ui/core/Avatar';
+import Button from '@material-ui/core/Button';
+import CssBaseline from '@material-ui/core/CssBaseline';
+import TextField from '@material-ui/core/TextField';
+import Grid from '@material-ui/core/Grid';
+import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
+import LockOpenIcon from '@material-ui/icons/LockOpen';
+import Typography from '@material-ui/core/Typography';
+import Container from '@material-ui/core/Container';
+import Link from '@material-ui/core/Link';
+import Box from '@material-ui/core/Box';
 
-class Auth extends Component {
-	constructor(props: string){
+const Regex = RegExp(/^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/);
+
+interface AuthProps extends WithStyles<typeof styles> {
+	updateToken: any;
+	clearToken: any;
+ }
+ interface AuthState {
+	login: boolean,
+	inputType: string,
+	firstName : string,
+	lastName: string,
+	beginCheckingAmount: number,
+	beginSavingsAmount: number,
+	email : string,
+	password : string,
+	errors : {
+		// firstName: string,
+		// lastName: string,
+		email : string,
+		password : string,
+		beginCheckingAmount: string,
+		beginSavingsAmount: string,
+		signin: string,
+	}
+ }
+
+ function Copyright() {
+	return (
+	  	<Typography variant="body2" color="textSecondary" align="center">
+			{'Copyright © '}
+			<Link color="inherit" href="https://material-ui.com/">
+		  		Arcane LLC
+			</Link>{' '}
+			{new Date().getFullYear()}
+			{'.'}
+	  	</Typography>
+	);
+  }
+
+ const styles = ({ palette, spacing}: Theme) => createStyles({
+	paper: {
+	  marginTop: spacing(8),
+	  display: 'flex',
+	  flexDirection: 'column',
+	  alignItems: 'center',
+	},
+	avatar: {
+	  margin: spacing(1),
+	  backgroundColor: palette.primary.dark,
+	},
+	input: {
+		backgroundColor: 'white',
+	},
+	form: {
+	  width: '100%', // Fix IE 11 issue.
+	  marginTop: spacing(3),
+	},
+	submit: {
+	  margin: spacing(3, 0, 2),
+	},
+  });
+
+class Auth extends React.Component<AuthProps, AuthState> {
+	
+	constructor(props: AuthProps){
 		super(props);
-		this.state = {
+		const initialState = {
+			login: true,
+			inputType: 'password',
 			firstName: '',
 			lastName: '',
 			email: '',
 			password: '',
-			login: false,
+			beginCheckingAmount: 0,
+			beginSavingsAmount: 0,
+			errors : {
+				// firstName: '',
+				// lastName: '',
+				email : '',
+				password : '',
+				beginCheckingAmount: '',
+				beginSavingsAmount: '',
+				signin: '',
+			} ,
 		}
-		this.toggleButton = this.toggleButton.bind(this);
+		this.state = initialState;
+		this.handleChange = this.handleChange.bind(this);
+		this.handleSubmit = this.handleSubmit.bind(this);
+		this.toggle = this.toggle.bind(this);
+		this.title = this.title.bind(this);
+		this.label = this.label.bind(this);
+
+	}
+	toggle = (event: any) => {
+		event.preventDefault();
+		if (this.state.login === false){
+			this.setState({login: true});
+		}
+		else if(this.state.login === true){
+			this.setState({login: false});
+		}
+		if (this.state.inputType === 'password'){
+			this.setState({inputType: 'text'});
+		}
+		else if(this.state.inputType === 'text'){
+			this.setState({inputType: 'password'});
+		}
+	}
+	handleChange = (event : any) => {
+		event.preventDefault();
+		const { name, value } = event.target;
+		let errors = this.state.errors;
+		switch (name) {
+			case 'beginCheckingAmount':
+				errors.beginCheckingAmount = value >= 0 && value !== '' ? '' : '0 or greater amount';
+				break;	
+			case 'beginSavingsAmount':
+				errors.beginSavingsAmount = value >= 0  && value !== '' ? '' : '0 or greater amount';
+				break;					
+			case 'email':
+				errors.email =  Regex.test(value) ? '' : 'Email is not valid';
+				break;
+			case 'password':
+				errors.password = value.length < 8 ? '8 characters or longer' : '';
+				break;
+		}
+		this.setState(Object.assign(this.state, { errors, [name]: value}));
+	}
+	handleSubmit = (event: any) => {
+		event.preventDefault();
+		let valid = true;
+		Object.values(this.state.errors).forEach(
+		  	(val) => val.length > 0 && (valid = false)
+		);
+		if(valid === true){
+			let userObject = {
+				firstName: this.state.firstName,
+				lastName: this.state.lastName,
+				email: this.state.email,
+				password: this.state.password,
+			};
+			let url = this.state.login === true 
+			? 'http://localhost:4000/user/login'
+			: 'http://localhost:4000/user/signup';
+			fetch(url, {
+				method: "POST",
+				headers: new Headers({
+					"Content-Type": "application/json",
+				}),
+				body: JSON.stringify(userObject),
+			})
+			.then((res) => res.json())
+			.then((data) => {
+				this.props.updateToken(data.sessionToken, data.user.admin, data.user.id);
+				let userAmount = {
+					checking: this.state.beginCheckingAmount,
+					savings: this.state.beginSavingsAmount,
+				};
+				fetch('http://localhost:4000/beginBalance/create', {
+					method: "POST",
+					headers: new Headers({
+						"Authorization": data.sessionToken,
+						"Content-Type": "application/json",
+					}),
+					body: JSON.stringify(userAmount),
+				})
+				// console.log(data.sessionToken);
+				// console.log(data.user.admin);
+				// console.log(data.user.id);
+
+			})
+			.catch((err) => console.log(err));
+		}
+		else{
+			console.log("Authentication Error!!!")
+			this.setState({firstName: ''});
+			this.setState({lastName: ''});
+			this.setState({beginCheckingAmount: 0});
+			this.setState({beginSavingsAmount: 0});
+			this.setState({email: ''});
+			this.setState({password: ''});
+		}
 	}
 
-	toggleButton(){
-		this.setState({login: true});
+	handleLogin = () => {
+		return <Redirect to="/Login"/>
+	}
+
+	title = () => {
+		if (this.state.login === true ){
+			return "Login"
+		}
+		else {
+			return "SignUp"
+		}
+	}
+	label = () => {
+		if (this.state.login !== true ){
+			return "Go to Login"
+		}
+		else {
+			return "Go to SignUp"
+		}
 	}
 	render(){
+		const {errors} = this.state;
+		const {classes} = this.props;
 		return(
-			<div>
-				<Container>
-					<Form>
-						<FormGroup>
-							<Label htmlFor="firstName">First Name</Label><br />
-							<Input name="firstName" type="text" required/><br />
-						</FormGroup>
-						<FormGroup>
-							<Label htmlFor="lastName">Last Name</Label><br />
-							<Input name="lastName" type="text" required/><br />
-						</FormGroup>
-						<FormGroup>
-							<Label htmlFor="beginCheckingAmount">Begin Checking Amount</Label><br />
-							<Input name="beginCheckingAmount" type="number" min="0.00" step="0.01"/><br />
-						</FormGroup>
-						<FormGroup>
-							<Label htmlFor="beginSavingsAmount">Begin Savings Amount</Label><br />
-							<Input name="beginSavingsAmount" type="number" min="0.00" step="0.01"/><br />
-						</FormGroup>
-						<FormGroup>
-							<Label htmlFor="email">Email</Label><br />
-							<Input name="email" type="email" required/><br />
-						</FormGroup>
-						<FormGroup>
-							<Label htmlFor="password">Password</Label><br />
-							<Input name="password" type="password" required/><br />	
-						</FormGroup>
-					</Form>
-					<div className="d-flex justify-content-between">
-						<Button color="warning" type="submit">Sign Up</Button>
-						<Button color="success" className="toggle_button" >Toggle Here</Button>
-					</div>
-				</Container>
+			<Container component="main" maxWidth="xs">
+			<CssBaseline />
+			<div className={classes.paper}>
+				  <Avatar className={classes.avatar}>
+					{this.state.login === true ? 
+						<LockOutlinedIcon />
+					:
+						<LockOpenIcon />
+					}
+				  </Avatar>
+				  <Typography component="h1" variant="h5">
+					  {this.title()}
+				  </Typography>
+				  <form className={classes.form} onSubmit={this.handleSubmit}>
+
+					{this.state.login === false ? (
+						<Grid container spacing={2}>
+
+							<Grid item xs={12} sm={6}>
+								<TextField onChange={this.handleChange} className={classes.input} autoComplete="fname" name="firstName" variant="outlined" required fullWidth id="firstName" label="First Name" autoFocus />
+							</Grid>
+							<Grid item xs={12} sm={6}>
+								<TextField onChange={this.handleChange} className={classes.input} variant="outlined" required fullWidth id="lastName" label="Last Name" name="lastName" autoComplete="lname" />
+							</Grid>
+							<Grid item xs={12} sm={6}>
+								<TextField onChange={this.handleChange} className={classes.input} autoComplete="bcheckamt" name="beginCheckingAmount" variant="outlined" required fullWidth id="beginCheckingAmount" label="Begin Checking Amount" autoFocus />
+								&nbsp;&nbsp;{errors.beginCheckingAmount.length > 0 &&  <span style={{color: "red"}}>{errors.beginCheckingAmount}</span>}
+							</Grid>
+							<Grid item xs={12} sm={6}>
+								<TextField onChange={this.handleChange} className={classes.input} variant="outlined" required fullWidth id="beginSavingsAmount" label="Begin Savings Amount" name="beginSavingsAmount" autoComplete="bsavamt" />
+								&nbsp;&nbsp;{errors.beginSavingsAmount.length > 0 &&  <span style={{color: "red"}}>{errors.beginSavingsAmount}</span>}
+							</Grid>
+						</Grid>
+					) : null}
+					<Grid container spacing={2}>
+						<Grid item xs={12}>
+							<TextField onChange={this.handleChange} className={classes.input} variant="outlined" required fullWidth id="email" label="Email Address" name="email" autoComplete="email" />
+							&nbsp;&nbsp;{errors.email.length > 0 &&  <span style={{color: "red"}}>{errors.email}</span>}
+						</Grid>
+						<Grid item xs={12}>
+							<TextField onChange={this.handleChange} className={classes.input} variant="outlined" required fullWidth name="password" label="Password" type="password" id="password" autoComplete="current-password" />
+							&nbsp;&nbsp;{errors.password.length > 0 &&  <span style={{color: "red"}}>{errors.password}</span>}
+						</Grid>
+					</Grid>
+					<Button className={classes.submit} type="submit" fullWidth variant="contained" color="primary" >{this.title()}</Button>
+					<Button onClick={this.toggle} className={classes.submit} type="submit" fullWidth variant="contained" color="primary" >{this.label()}</Button>
+				  </form>
 			</div>
+			<Box mt={5}>
+        		<Copyright />
+     		</Box>
+		  </Container>
+			// <div>
+			// 	<form className={classes.form} onSubmit={this.handleSubmit}>
+			// 	<h2>{this.title()}</h2>
+			// 		{this.state.login === false ? (
+			// 			<div>
+			// 				<div >
+			// 					<label htmlFor="firstName">First Name</label><br />
+			// 					<input name="firstName" type="text" required onChange={this.handleChange}/>
+			// 					{/* {errors.firstName.length > 0 &&  <span style={{color: "red"}}>{errors.firstName}</span>} */}
+			// 				</div>
+			// 				<div >
+			// 					<label htmlFor="lastName">Last Name</label><br />
+			// 					<input name="lastName" type="text" required onChange={this.handleChange}/>
+			// 					{/* {errors.lastName.length > 0 &&  <span style={{color: "red"}}>{errors.lastName}</span>} */}
+			// 				</div>
+			// 				<div >
+			// 					<span><label htmlFor="beginCheckingAmount">Begin Checking Amount</label>&nbsp;&nbsp;{errors.beginCheckingAmount.length > 0 &&  <span style={{color: "red"}}>{errors.beginCheckingAmount}</span>}</span><br />
+			// 					<input name="beginCheckingAmount" type="number" min="0.00" step="0.01" required onChange={this.handleChange}/>
+			// 				</div>
+			// 				<div >
+			// 					<span><label htmlFor="beginSavingsAmount">Begin Savings Amount</label>&nbsp;&nbsp;{errors.beginSavingsAmount.length > 0 &&  <span style={{color: "red"}}>{errors.beginSavingsAmount}</span>}</span><br />
+			// 					<input name="beginSavingsAmount" type="number" min="0.00" step="0.01" required onChange={this.handleChange}/>
+			// 				</div>
+			// 			</div>
+			// 		) : null}
+			// 		<div>
+			// 			<div >
+			// 				<span><label htmlFor="email">Email</label>&nbsp;&nbsp;{errors.email.length > 0 &&  <span style={{color: "red"}}>{errors.email}</span>}</span><br />
+			// 				<input name="email" type="email" required onChange={this.handleChange}/>
+			// 			</div>
+			// 			<div >
+							// <span><label htmlFor="password">Password</label>&nbsp;&nbsp;{errors.password.length > 0 &&  <span style={{color: "red"}}>{errors.password}</span>}</span><br />
+			// 				<input name="password" type={this.state.inputType} required onChange={this.handleChange}/>
+			// 			</div>
+			// 			<br />
+			// 			<div >
+			// 				<button className="button" >{this.title()}</button>
+			// 				<button className="button" onClick={this.toggle}>{this.label()}</button>
+			// 			</div>
+			// 		</div>
+			// 	</form>
+			// </div>
 		)
 	}
 }
 
-export default Auth;
+export default withStyles(styles)(Auth);
