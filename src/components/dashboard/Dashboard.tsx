@@ -1,6 +1,15 @@
 import React from 'react';
+import Table from '@material-ui/core/Table';
+import TableBody from '@material-ui/core/TableBody';
+import TableCell from '@material-ui/core/TableCell';
+import TableContainer from '@material-ui/core/TableContainer';
+import TableHead from '@material-ui/core/TableHead';
+import TableRow from '@material-ui/core/TableRow';
+import Grid from '@material-ui/core/Grid';
+import { withStyles, createStyles, WithStyles, Theme } from '@material-ui/core/styles';
 
-interface DashProps {
+
+interface DashProps extends WithStyles<typeof styles> {
 	userid: number,
 	token: string,
 }
@@ -8,8 +17,14 @@ interface DashState {
 	user_id: any,
 	checking: any[], 
 	savings: any[], 
-
+	
 }
+
+const styles = ({ palette, spacing}: Theme) => createStyles({
+	table: {
+	minWidth: 650,
+	},
+});
 
 class Dashboard extends React.Component<DashProps, DashState> {
 	constructor(props: DashProps){
@@ -19,7 +34,6 @@ class Dashboard extends React.Component<DashProps, DashState> {
 			checking: [],
 			savings: [],
 		}
-		// this.getChecking = this.getChecking.bind(this);
 	}
 
 	componentDidMount = () => {
@@ -36,7 +50,7 @@ class Dashboard extends React.Component<DashProps, DashState> {
 			this.setState({user_id: this.props.userid})
 			this.setState({checking: [ ...this.state.checking, ...data ]})			  
 		})
-
+		
 		fetch('http://localhost:4000/savings', {
 			method: "GET",
 			headers: new Headers({
@@ -50,69 +64,81 @@ class Dashboard extends React.Component<DashProps, DashState> {
 			this.setState({savings: [ ...this.state.savings, ...data ]})			  
 		})
 	}
-
+	
 	render(){
+		const {classes} = this.props;
 		return(
 			<div>
-				<h1>This is the Dashboard!!!</h1>
-					<h2>Checking</h2>
-					<table>
-						<thead>
-							<tr>
-								<th>Date</th>
-								<th>Time</th>
-								<th>Category</th>
-								<th>Type</th>
-								<th>Name</th>
-								<th>Description</th>
-								<th>Amount</th>
-							</tr>
-						</thead>
-						<tbody>
-							{this.state.checking.map((data, i) => (
-							<tr key={i}>
-								<td>{data.checkingDate}</td>
-								<td>{data.checkingTime}</td>
-								<td>{data.checkingCategory}</td>
-								<td>{data.checkingType}</td>
-								<td>{data.checkingName}</td>
-								<td>{data.checkingDescription}</td>
-								<td>${data.checkingAmount}</td>
-							</tr>
-							))}	
-						</tbody>
-					</table>
-					<hr />
-					<h2>Savings</h2>
-					<table>
-						<thead>
-							<tr>
-								<th>Date</th>
-								<th>Time</th>
-								<th>Category</th>
-								<th>Type</th>
-								<th>Name</th>
-								<th>Description</th>
-								<th>Amount</th>
-							</tr>
-						</thead>
-						<tbody>
-							{this.state.savings.map((data, i) => (
-							<tr key={i}>
-								<td>{data.savingsDate}</td>
-								<td>{data.savingsTime}</td>
-								<td>{data.savingsCategory}</td>
-								<td>{data.savingsType}</td>
-								<td>{data.savingsName}</td>
-								<td>{data.savingsDescription}</td>
-								<td>${data.savingsAmount}</td>
-							</tr>
-							))}	
-						</tbody>
-					</table>
+				<Grid container spacing={3}>
+					<Grid item xs={6}>
+						<TableContainer>
+							<br />
+							<h2>Checking</h2>
+							<Table className={classes.table} size="small" aria-label="a dense table">
+								<TableHead>
+									<TableRow>
+										<TableCell>Date</TableCell>
+										<TableCell>Time</TableCell>
+										<TableCell>Category</TableCell>
+										<TableCell>Type</TableCell>
+										<TableCell>Name</TableCell>
+										<TableCell>Description</TableCell>
+										<TableCell>Amount</TableCell>
+									</TableRow>
+								</TableHead>
+								<TableBody>
+									{this.state.checking.map((data, i) => (
+									<TableRow key={i}>
+										<TableCell>{data.checkingDate}</TableCell>
+										<TableCell>{data.checkingTime}</TableCell>
+										<TableCell>{data.checkingCategory}</TableCell>
+										<TableCell>{data.checkingType}</TableCell>
+										<TableCell>{data.checkingName}</TableCell>
+										<TableCell>{data.checkingDescription}</TableCell>
+										<TableCell>${data.checkingAmount}</TableCell>
+									</TableRow>
+									))}	
+								</TableBody>
+							</Table>
+						</TableContainer>
+					</Grid>
+					<Grid item xs={6}>
+						<TableContainer>
+							<br />
+							<h2>Savings</h2>
+							<Table size="small" aria-label="a dense table">
+								<TableHead>
+									<TableRow>
+										<TableCell>Date</TableCell>
+										<TableCell>Time</TableCell>
+										<TableCell>Category</TableCell>
+										<TableCell>Type</TableCell>
+										<TableCell>Name</TableCell>
+										<TableCell>Description</TableCell>
+										<TableCell>Amount</TableCell>
+									</TableRow>
+								</TableHead>
+								<TableBody>
+									{this.state.savings.map((data, i) => (
+									<TableRow key={i}>
+										<TableCell>{data.savingsDate}</TableCell>
+										<TableCell>{data.savingsTime}</TableCell>
+										<TableCell>{data.savingsCategory}</TableCell>
+										<TableCell>{data.savingsType}</TableCell>
+										<TableCell>{data.savingsName}</TableCell>
+										<TableCell>{data.savingsDescription}</TableCell>
+										<TableCell>${data.savingsAmount}</TableCell>
+									</TableRow>
+									))}	
+								</TableBody>
+							</Table>
+						</TableContainer>
+					</Grid>
+				</Grid>
 			</div>
 		)
 	}
 }
 
-export default Dashboard;
+
+export default withStyles(styles)(Dashboard);

@@ -1,12 +1,23 @@
 import React from 'react';
+import './NavBar.css';
 import { Router,Link, Switch, Route } from 'react-router-dom';
 import { createBrowserHistory } from 'history';
 import Dashboard from '../dashboard/Dashboard';
 import Checking from '../checking/Checking';
 import Savings from '../savings/Savings';
 import Budget from '../budget/Budget';
-import Settings from '../settings/Settings';
+import Settings from '../mysettings/Settings';
 import Admin from '../admin/Admin';
+
+import { makeStyles } from '@material-ui/core/styles';
+import AppBar from '@material-ui/core/AppBar';
+import Toolbar from '@material-ui/core/Toolbar';
+import Typography from '@material-ui/core/Typography';
+import Button from '@material-ui/core/Button';
+import IconButton from '@material-ui/core/IconButton';
+import MenuIcon from '@material-ui/icons/Menu';
+
+
 
 interface NavBarProps {
 	userid: number,
@@ -29,7 +40,20 @@ class NavBar extends React.Component<NavBarProps, NavBarState> {
 			lastName: '', 
 			admin: false,
 		}
+		this.useStyles = this.useStyles.bind(this);
+
 	}
+	useStyles = makeStyles((theme) => ({
+		root: {
+		  flexGrow: 1,
+		},
+		menuButton: {
+		  marginRight: theme.spacing(2),
+		},
+		title: {
+		  flexGrow: 1,
+		},
+	}));
 	componentDidMount = () => {
 		fetch('http://localhost:4000/user/name', {
 			method: "GET",
@@ -47,13 +71,10 @@ class NavBar extends React.Component<NavBarProps, NavBarState> {
 		this.setState({admin: this.props.admin})
 	}
 
-
+	
 	render(){
 		return(
 			<div>
-				<table>
-					<tbody><tr><td>Welcome: {this.state.firstName + ' ' + this.state.lastName}</td></tr></tbody>
-				</table>
 				{
 				this.state.admin === true ? 
 					<Switch>
@@ -61,12 +82,19 @@ class NavBar extends React.Component<NavBarProps, NavBarState> {
 					</Switch>
 				:
 				<Router history={history}>
-					<button><Link to="/dashboard">Dashboard</Link></button>
-					<button><Link to='/checking'>Checking</Link></button>
-					<button><Link to='/savings'>Savings</Link></button>
-					<button><Link to='/budget'>Budget</Link></button>
-					<button><Link to='/settings'>Settings</Link></button>
-					<button onClick={this.props.clearToken}><Link to=''>Logout</Link></button>
+					    <AppBar position="fixed" className="myNavBar">
+							<Toolbar>
+								<Typography variant="h6">
+									Welcome: {this.state.firstName + ' ' + this.state.lastName}
+								</Typography>
+								<Button color="inherit"><Link to="/dashboard">Dashboard</Link></Button>
+								<Button color="inherit"><Link to='/checking'>Checking</Link></Button>
+								<Button color="inherit"><Link to='/savings'>Savings</Link></Button>
+								<Button color="inherit"><Link to='/budget'>Budget</Link></Button>
+								<Button color="inherit"><Link to='/settings'>Settings</Link></Button>
+								<Button color="inherit" onClick={this.props.clearToken}><Link to=''>Logout</Link></Button>
+							</Toolbar>
+						</AppBar>
 				<Switch>
 					<Route exact path="/dashboard"><Dashboard token={this.props.token} userid={this.props.userid}/></Route>
 					<Route exact path="/"><Dashboard token={this.props.token} userid={this.props.userid}/></Route>
@@ -76,7 +104,7 @@ class NavBar extends React.Component<NavBarProps, NavBarState> {
 					<Route exact path="/settings"><Settings token={this.props.token} userid={this.props.userid}/></Route>
 				</Switch>
 				</Router>
-				};
+				}
 			</div>
 		)
 	}

@@ -6,7 +6,7 @@ import NavBar from './components/site/NavBar';
 // import { BrowserRouter as Router, Switch, Route, Redirect } from "react-router-dom";
 
 function App() {
-	const [sessionToken, setSessionToken] = useState();
+	const [sessionToken, setSessionToken] = useState('');
 	const [admin, setAdmin] = useState();
 	const [userid, setUserid] = useState();
 
@@ -27,7 +27,7 @@ function App() {
 
 	const protectedViews = () => {
 		return admin ? (<Admin clearToken={clearToken}/>) 
-		: sessionToken === localStorage.getItem("token") ? (<NavBar admin={admin} token={sessionToken} userid={userid} clearToken={clearToken}/>) 
+		: sessionToken !== '' ? (<NavBar admin={admin} token={sessionToken} userid={userid} clearToken={clearToken}/>) 
 		: (<Auth updateToken={updateToken} clearToken={clearToken}/>);
 	};
 
