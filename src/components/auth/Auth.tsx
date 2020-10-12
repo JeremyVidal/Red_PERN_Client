@@ -1,5 +1,4 @@
 import React from 'react';
-import { Redirect } from 'react-router-dom';
 import { withStyles, createStyles, WithStyles, Theme } from '@material-ui/core/styles';
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
@@ -96,7 +95,7 @@ class Auth extends React.Component<AuthProps, AuthState> {
 				beginCheckingAmount: '',
 				beginSavingsAmount: '',
 				signin: '',
-			} ,
+			},
 		}
 		this.state = initialState;
 		this.handleChange = this.handleChange.bind(this);
@@ -126,6 +125,12 @@ class Auth extends React.Component<AuthProps, AuthState> {
 		const { name, value } = event.target;
 		let errors = this.state.errors;
 		switch (name) {
+			// case 'firstName':
+			// 	errors.firstName = value >= 0 && value !== '' ? '' : 'Cannot be empty';
+			// 	break;	
+			// case 'lastName':
+			// 	errors.lastName = value >= 0 && value !== '' ? '' : 'Cannot be empty';
+			// 	break;	
 			case 'beginCheckingAmount':
 				errors.beginCheckingAmount = value >= 0 && value !== '' ? '' : '0 or greater amount';
 				break;	
@@ -197,10 +202,6 @@ class Auth extends React.Component<AuthProps, AuthState> {
 		}
 	}
 
-	handleLogin = () => {
-		return <Redirect to="/Login"/>
-	}
-
 	title = () => {
 		if (this.state.login === true ){
 			return "Login"
@@ -224,6 +225,8 @@ class Auth extends React.Component<AuthProps, AuthState> {
 			<Container component="main" maxWidth="xs">
 			<CssBaseline />
 			<div className={classes.paper}>
+				<Typography component="h1" variant="h5"><code>Welcome to Budget Tracker</code></Typography>
+				<br />
 				  <Avatar className={classes.avatar}>
 					{this.state.login === true ? 
 						<LockOutlinedIcon />
@@ -241,9 +244,11 @@ class Auth extends React.Component<AuthProps, AuthState> {
 
 							<Grid item xs={12} sm={6}>
 								<TextField onChange={this.handleChange} className={classes.input} autoComplete="fname" name="firstName" variant="outlined" required fullWidth id="firstName" label="First Name" autoFocus />
+								{/* &nbsp;&nbsp;{errors.firstName === '' &&  <span style={{color: "red"}}>{errors.firstName}</span>} */}
 							</Grid>
 							<Grid item xs={12} sm={6}>
 								<TextField onChange={this.handleChange} className={classes.input} variant="outlined" required fullWidth id="lastName" label="Last Name" name="lastName" autoComplete="lname" />
+								{/* &nbsp;&nbsp;{errors.lastName === '' &&  <span style={{color: "red"}}>{errors.lastName}</span>} */}
 							</Grid>
 							<Grid item xs={12} sm={6}>
 								<TextField onChange={this.handleChange} className={classes.input} autoComplete="bcheckamt" name="beginCheckingAmount" variant="outlined" required fullWidth id="beginCheckingAmount" label="Begin Checking Amount" autoFocus />
@@ -273,48 +278,6 @@ class Auth extends React.Component<AuthProps, AuthState> {
         		<Copyright />
      		</Box>
 		  </Container>
-			// <div>
-			// 	<form className={classes.form} onSubmit={this.handleSubmit}>
-			// 	<h2>{this.title()}</h2>
-			// 		{this.state.login === false ? (
-			// 			<div>
-			// 				<div >
-			// 					<label htmlFor="firstName">First Name</label><br />
-			// 					<input name="firstName" type="text" required onChange={this.handleChange}/>
-			// 					{/* {errors.firstName.length > 0 &&  <span style={{color: "red"}}>{errors.firstName}</span>} */}
-			// 				</div>
-			// 				<div >
-			// 					<label htmlFor="lastName">Last Name</label><br />
-			// 					<input name="lastName" type="text" required onChange={this.handleChange}/>
-			// 					{/* {errors.lastName.length > 0 &&  <span style={{color: "red"}}>{errors.lastName}</span>} */}
-			// 				</div>
-			// 				<div >
-			// 					<span><label htmlFor="beginCheckingAmount">Begin Checking Amount</label>&nbsp;&nbsp;{errors.beginCheckingAmount.length > 0 &&  <span style={{color: "red"}}>{errors.beginCheckingAmount}</span>}</span><br />
-			// 					<input name="beginCheckingAmount" type="number" min="0.00" step="0.01" required onChange={this.handleChange}/>
-			// 				</div>
-			// 				<div >
-			// 					<span><label htmlFor="beginSavingsAmount">Begin Savings Amount</label>&nbsp;&nbsp;{errors.beginSavingsAmount.length > 0 &&  <span style={{color: "red"}}>{errors.beginSavingsAmount}</span>}</span><br />
-			// 					<input name="beginSavingsAmount" type="number" min="0.00" step="0.01" required onChange={this.handleChange}/>
-			// 				</div>
-			// 			</div>
-			// 		) : null}
-			// 		<div>
-			// 			<div >
-			// 				<span><label htmlFor="email">Email</label>&nbsp;&nbsp;{errors.email.length > 0 &&  <span style={{color: "red"}}>{errors.email}</span>}</span><br />
-			// 				<input name="email" type="email" required onChange={this.handleChange}/>
-			// 			</div>
-			// 			<div >
-							// <span><label htmlFor="password">Password</label>&nbsp;&nbsp;{errors.password.length > 0 &&  <span style={{color: "red"}}>{errors.password}</span>}</span><br />
-			// 				<input name="password" type={this.state.inputType} required onChange={this.handleChange}/>
-			// 			</div>
-			// 			<br />
-			// 			<div >
-			// 				<button className="button" >{this.title()}</button>
-			// 				<button className="button" onClick={this.toggle}>{this.label()}</button>
-			// 			</div>
-			// 		</div>
-			// 	</form>
-			// </div>
 		)
 	}
 }

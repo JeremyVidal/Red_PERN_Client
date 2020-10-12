@@ -14,8 +14,8 @@ import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
-import IconButton from '@material-ui/core/IconButton';
-import MenuIcon from '@material-ui/icons/Menu';
+// import IconButton from '@material-ui/core/IconButton';
+// import MenuIcon from '@material-ui/icons/Menu';
 
 
 
@@ -85,7 +85,7 @@ class NavBar extends React.Component<NavBarProps, NavBarState> {
 					    <AppBar position="fixed" className="myNavBar">
 							<Toolbar>
 								<Typography variant="h6">
-									Welcome: {this.state.firstName + ' ' + this.state.lastName}
+									Welcome: <code>{this.state.firstName + ' ' + this.state.lastName}</code>&nbsp;&nbsp;
 								</Typography>
 								<Button color="inherit"><Link to="/dashboard">Dashboard</Link></Button>
 								<Button color="inherit"><Link to='/checking'>Checking</Link></Button>
@@ -101,7 +101,7 @@ class NavBar extends React.Component<NavBarProps, NavBarState> {
 					<Route exact path="/checking"><Checking token={this.props.token} userid={this.props.userid}/></Route>
 					<Route exact path="/savings"><Savings token={this.props.token} userid={this.props.userid}/></Route>
 					<Route exact path="/budget"><Budget token={this.props.token} userid={this.props.userid}/></Route>
-					<Route exact path="/settings"><Settings token={this.props.token} userid={this.props.userid}/></Route>
+					<Route exact path="/settings"><Settings clearToken={this.props.clearToken} token={this.props.token}/></Route>
 				</Switch>
 				</Router>
 				}

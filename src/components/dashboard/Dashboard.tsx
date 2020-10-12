@@ -68,7 +68,7 @@ class Dashboard extends React.Component<DashProps, DashState> {
 	render(){
 		const {classes} = this.props;
 		return(
-			<div>
+			<div className="wrapper">
 				<Grid container spacing={3}>
 					<Grid item xs={6}>
 						<TableContainer>
@@ -82,7 +82,7 @@ class Dashboard extends React.Component<DashProps, DashState> {
 										<TableCell>Category</TableCell>
 										<TableCell>Type</TableCell>
 										<TableCell>Name</TableCell>
-										<TableCell>Description</TableCell>
+										{/* <TableCell>Description</TableCell> */}
 										<TableCell>Amount</TableCell>
 									</TableRow>
 								</TableHead>
@@ -94,7 +94,7 @@ class Dashboard extends React.Component<DashProps, DashState> {
 										<TableCell>{data.checkingCategory}</TableCell>
 										<TableCell>{data.checkingType}</TableCell>
 										<TableCell>{data.checkingName}</TableCell>
-										<TableCell>{data.checkingDescription}</TableCell>
+										{/* <TableCell>{data.checkingDescription}</TableCell> */}
 										<TableCell>${data.checkingAmount}</TableCell>
 									</TableRow>
 									))}	
@@ -114,7 +114,7 @@ class Dashboard extends React.Component<DashProps, DashState> {
 										<TableCell>Category</TableCell>
 										<TableCell>Type</TableCell>
 										<TableCell>Name</TableCell>
-										<TableCell>Description</TableCell>
+										{/* <TableCell>Description</TableCell> */}
 										<TableCell>Amount</TableCell>
 									</TableRow>
 								</TableHead>
@@ -126,7 +126,7 @@ class Dashboard extends React.Component<DashProps, DashState> {
 										<TableCell>{data.savingsCategory}</TableCell>
 										<TableCell>{data.savingsType}</TableCell>
 										<TableCell>{data.savingsName}</TableCell>
-										<TableCell>{data.savingsDescription}</TableCell>
+										{/* <TableCell>{data.savingsDescription}</TableCell> */}
 										<TableCell>${data.savingsAmount}</TableCell>
 									</TableRow>
 									))}	

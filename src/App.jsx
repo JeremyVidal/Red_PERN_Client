@@ -11,15 +11,15 @@ function App() {
 	const [userid, setUserid] = useState();
 
 	const updateToken = (newToken, newAdmin, newUserid) => {
-		localStorage.setItem("token", newToken);
+		// localStorage.setItem("token", newToken);
 		setSessionToken(newToken);
-		localStorage.setItem("admin", newAdmin);
+		// localStorage.setItem("admin", newAdmin);
 		setAdmin(newAdmin);
-		localStorage.setItem("userid", newUserid);
+		// localStorage.setItem("userid", newUserid);
 		setUserid(newUserid);
 	};
 	const clearToken = () => {
-		localStorage.clear();
+		// localStorage.clear();
 		setSessionToken("");
 		setAdmin(false);
 		setUserid('');
