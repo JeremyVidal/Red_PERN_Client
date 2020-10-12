@@ -5,7 +5,7 @@ import { createBrowserHistory } from 'history';
 import Dashboard from '../dashboard/Dashboard';
 import Checking from '../checking/Checking';
 import Savings from '../savings/Savings';
-import Budget from '../budget/Budget';
+// import Budget from '../budget/Budget';
 import Settings from '../mysettings/Settings';
 import Admin from '../admin/Admin';
 
@@ -20,7 +20,6 @@ import Button from '@material-ui/core/Button';
 
 
 interface NavBarProps {
-	userid: number,
 	clearToken: any;
 	token: string,
 	admin: boolean,
@@ -90,17 +89,17 @@ class NavBar extends React.Component<NavBarProps, NavBarState> {
 								<Button color="inherit"><Link to="/dashboard">Dashboard</Link></Button>
 								<Button color="inherit"><Link to='/checking'>Checking</Link></Button>
 								<Button color="inherit"><Link to='/savings'>Savings</Link></Button>
-								<Button color="inherit"><Link to='/budget'>Budget</Link></Button>
+								{/* <Button color="inherit"><Link to='/budget'>Budget</Link></Button> */}
 								<Button color="inherit"><Link to='/settings'>Settings</Link></Button>
 								<Button color="inherit" onClick={this.props.clearToken}><Link to=''>Logout</Link></Button>
 							</Toolbar>
 						</AppBar>
 				<Switch>
-					<Route exact path="/dashboard"><Dashboard token={this.props.token} userid={this.props.userid}/></Route>
-					<Route exact path="/"><Dashboard token={this.props.token} userid={this.props.userid}/></Route>
-					<Route exact path="/checking"><Checking token={this.props.token} userid={this.props.userid}/></Route>
-					<Route exact path="/savings"><Savings token={this.props.token} userid={this.props.userid}/></Route>
-					<Route exact path="/budget"><Budget token={this.props.token} userid={this.props.userid}/></Route>
+					<Route exact path="/dashboard"><Dashboard token={this.props.token} /></Route>
+					<Route exact path="/"><Dashboard token={this.props.token} /></Route>
+					<Route exact path="/checking"><Checking token={this.props.token} /></Route>
+					<Route exact path="/savings"><Savings token={this.props.token} /></Route>
+					{/* <Route exact path="/budget"><Budget token={this.props.token} /></Route> */}
 					<Route exact path="/settings"><Settings clearToken={this.props.clearToken} token={this.props.token}/></Route>
 				</Switch>
 				</Router>

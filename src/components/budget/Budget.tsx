@@ -1,7 +1,6 @@
 import React from 'react';
 
 interface BudgetProps {
-	userid: number,
 	token: string,
 }
 

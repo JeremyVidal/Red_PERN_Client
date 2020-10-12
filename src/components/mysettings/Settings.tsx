@@ -29,6 +29,10 @@ interface SettingsProps extends WithStyles<typeof styles>{
 
 interface SettingsState {
 	open: boolean,
+	checkingCategory: string,
+	savingsCategory: string,
+	checkingType: string,
+	savingsType: string,
 	checkingCategories: any[],
 	checkingTypes: any[], 
 	savingsCategories: any[],
@@ -74,6 +78,10 @@ class Settings extends React.Component<SettingsProps, SettingsState> {
 		super(props);
 		this.state = {
 			open: false,
+			checkingCategory: '',
+			savingsCategory: '',
+			checkingType: '',
+			savingsType: '',
 			checkingCategories: [], 
 			checkingTypes: [], 
 			savingsCategories: [],
@@ -102,7 +110,158 @@ class Settings extends React.Component<SettingsProps, SettingsState> {
 		this.handleClickOpen = this.handleClickOpen.bind(this);
 		this.handleClose = this.handleClose.bind(this);
 		this.handleDelete = this.handleDelete.bind(this);
+		this.deleteCheckingCategory = this.deleteCheckingCategory.bind(this);
+		this.deleteSavingsCategory = this.deleteSavingsCategory.bind(this);
+		this.deleteCheckingTypes = this.deleteCheckingTypes.bind(this);
+		this.deleteSavingsTypes = this.deleteSavingsTypes.bind(this);
+		this.addCheckingCategory = this.addCheckingCategory.bind(this);
+		this.addSavingsCategory = this.addSavingsCategory.bind(this);
+		this.addCheckingType = this.addCheckingType.bind(this);
+		this.addSavingsType = this.addSavingsType.bind(this);
+		this.handleCategoryTypeChange = this.handleCategoryTypeChange.bind(this);
+		this.getUserInfo = this.getUserInfo.bind(this);
+		this.getBeginBalance = this.getBeginBalance.bind(this);
+		this.getCheckingCatgegories = this.getCheckingCatgegories.bind(this);
+		this.getCheckingTypes = this.getCheckingTypes.bind(this);
+		this.getSavingsCatgegories = this.getSavingsCatgegories.bind(this);
+		this.getSavingsTypes = this.getSavingsTypes.bind(this);
 
+
+	}
+	handleCategoryTypeChange = (event:any) => {
+		event.preventDefault();
+		const { name, value } = event.target;
+		this.setState(Object.assign(this.state, { [name]: value}));
+	}
+
+	addCheckingCategory = (event:any) => {
+		event.preventDefault();
+		let userObject = {
+			checkingCategory: this.state.checkingCategory,
+		};
+		fetch('http://localhost:4000/checkingCategories/create', {
+			method: "POST",
+			headers: new Headers({
+				"Content-Type": "application/json",
+				"Authorization": this.props.token
+			}),
+			body: JSON.stringify(userObject),
+		})
+		.then(() => {
+			this.getCheckingCatgegories(this.props.token);
+		})
+	}
+
+	addSavingsCategory = (event:any) => {
+		event.preventDefault();
+		let userObject = {
+			savingsCategory: this.state.savingsCategory,
+		};
+		fetch('http://localhost:4000/savingsCategories/create', {
+			method: "POST",
+			headers: new Headers({
+				"Content-Type": "application/json",
+				"Authorization": this.props.token
+			}),
+			body: JSON.stringify(userObject),
+		})
+		.then(() => {
+			this.getSavingsCatgegories(this.props.token);
+		})
+	}
+
+	addCheckingType = (event:any) => {
+		event.preventDefault();
+		// console.log(this.state.checkingType)
+		let userObject = {
+			checkingType: this.state.checkingType,
+		};
+		fetch('http://localhost:4000/checkingTypes/create', {
+			method: "POST",
+			headers: new Headers({
+				"Content-Type": "application/json",
+				"Authorization": this.props.token
+			}),
+			body: JSON.stringify(userObject),
+		})
+		.then(() => {
+			this.getCheckingTypes(this.props.token);
+		})
+	}
+
+	addSavingsType = (event:any) => {
+		event.preventDefault();
+		let userObject = {
+			savingsType: this.state.savingsType,
+		};
+		fetch('http://localhost:4000/savingsTypes/create', {
+			method: "POST",
+			headers: new Headers({
+				"Content-Type": "application/json",
+				"Authorization": this.props.token
+			}),
+			body: JSON.stringify(userObject),
+		})
+		.then(() => {
+			this.getSavingsTypes(this.props.token);
+		})
+	}
+
+	deleteSavingsTypes = (event:any, id:number) => {
+		event.preventDefault();
+		this.setState({open: false});
+		fetch(`http://localhost:4000/savingsTypes/${id}`, {
+			method: 'DELETE',
+			headers: new Headers({
+				'Content-Type': 'application/json',
+				'Authorization': this.props.token
+			})
+		})
+		.then(() => {
+			this.getSavingsTypes(this.props.token);
+		})
+	}
+	deleteCheckingTypes = (event:any, id:number) => {
+		event.preventDefault();
+		this.setState({open: false});
+		fetch(`http://localhost:4000/checkingTypes/${id}`, {
+			method: 'DELETE',
+			headers: new Headers({
+				'Content-Type': 'application/json',
+				'Authorization': this.props.token
+			})
+		})
+		.then(() => {
+			this.getCheckingTypes(this.props.token);
+		})
+	}
+	deleteSavingsCategory = (event:any, id:number) => {
+		event.preventDefault();
+		this.setState({open: false});
+		fetch(`http://localhost:4000/savingsCategories/${id}`, {
+			method: 'DELETE',
+			headers: new Headers({
+				'Content-Type': 'application/json',
+				'Authorization': this.props.token
+			})
+		})
+		.then(() => {
+			this.getSavingsCatgegories(this.props.token);
+		})
+	}
+	deleteCheckingCategory = (event:any, id:number) => {
+		event.preventDefault();
+		this.setState({open: false});
+		fetch(`http://localhost:4000/checkingCategories/${id}`, {
+			method: 'DELETE',
+			headers: new Headers({
+				'Content-Type': 'application/json',
+				'Authorization': this.props.token
+			})
+		})
+		.then(() => {
+			this.getCheckingCatgegories(this.props.token);
+		})
 	}
 	handleClickOpen = (event:any) => {
 		event.preventDefault();
@@ -123,22 +282,14 @@ class Settings extends React.Component<SettingsProps, SettingsState> {
 				'Authorization': this.props.token
 			})
 		})
-		.then(res => res.json())
-		.catch(err => console.log(err))
-		this.props.clearToken();
+		.then(() => {this.props.clearToken();})
 	}
 
 	handleInfoChange = (event : any) => {
 		event.preventDefault();
 		const { name, value } = event.target;
 		let errors = this.state.errors;
-		switch (name) {
-			// case 'firstName':
-			// 	errors.firstName = value >= 0 && value !== '' ? '' : 'Cannot be empty';
-			// 	break;	
-			// case 'lastName':
-			// 	errors.lastName = value >= 0 && value !== '' ? '' : 'Cannot be empty';
-			// 	break;	
+		switch (name) {	
 			case 'beginCheckingAmount':
 				errors.beginCheckingAmount = value >= 0 && value !== '' ? '' : '0 or greater amount';
 				break;	
@@ -168,32 +319,6 @@ class Settings extends React.Component<SettingsProps, SettingsState> {
 					firstName: this.state.firstName,
 					lastName: this.state.lastName,
 					email: this.state.email,
-				}),
-				headers: new Headers({
-					"Content-Type": "application/json",
-					'Accept': 'application/json',
-					"Authorization": this.props.token,
-				}),
-				})
-			.then((response) => response.json())
-		}
-		else{
-			this.setState({firstName: ''})
-			this.setState({lastName: ''})
-			this.setState({email: ''})
-		}
-	}
-
-	handlePassUpdate = (event: any) => {
-		event.preventDefault();
-		let valid = true;
-		if (this.state.errors.password === ''){
-			return valid = false
-		}
-		if(valid === true){
-			fetch('http://localhost:4000/user/pass', {
-				method: "PUT",
-				body: JSON.stringify({						
 					password: this.state.password
 				}),
 				headers: new Headers({
@@ -203,12 +328,32 @@ class Settings extends React.Component<SettingsProps, SettingsState> {
 				}),
 				})
 			.then((response) => response.json())
+
+			fetch('http://localhost:4000/beginBalance/update', {
+				method: "PUT",
+				body: JSON.stringify({						
+					checking: this.state.beginCheckingAmount,
+					savings: this.state.beginSavingsAmount,
+				}),
+				headers: new Headers({
+					"Content-Type": "application/json",
+					'Accept': 'application/json',
+					"Authorization": this.props.token,
+				}),
+				})
+			.then((response) => response.json())
+			.then(() => 
+				this.state.password !== '' && this.state.password !== null && this.state.password !== undefined 
+				? this.props.clearToken()
+				: null
+			)
 		}
 		else{
-			this.setState({password: ''})
+			this.setState({firstName: ''})
+			this.setState({lastName: ''})
+			this.setState({email: ''})
 		}
 	}
-
 
 	toggle = (event: any) => {
 		event.preventDefault();
@@ -218,14 +363,24 @@ class Settings extends React.Component<SettingsProps, SettingsState> {
 		else if(this.state.togglePassword === true){
 			this.setState({togglePassword: false});
 		}
+
 	}
 
 	componentDidMount = () => {
+		this.getUserInfo(this.props.token)
+		this.getBeginBalance(this.props.token)
+		this.getCheckingCatgegories(this.props.token)
+		this.getCheckingTypes(this.props.token)
+		this.getSavingsCatgegories(this.props.token)
+		this.getSavingsTypes(this.props.token)
+	}
+
+	getUserInfo = (token:any) => {
 		fetch('http://localhost:4000/user', {
 			method: "GET",
 			headers: new Headers({
 				"Content-Type": "application/json",
-				"Authorization": this.props.token,
+				"Authorization": token,
 			}),
 		})
 		.then((res) => res.json())
@@ -234,12 +389,13 @@ class Settings extends React.Component<SettingsProps, SettingsState> {
 			this.setState({lastName: data.lastName})
 			this.setState({email: data.email})
 		})
-
+	}
+	getBeginBalance = (token:any) => {
 		fetch('http://localhost:4000/beginBalance', {
 			method: "GET",
 			headers: new Headers({
 				"Content-Type": "application/json",
-				"Authorization": this.props.token,
+				"Authorization": token,
 			}),
 		})
 		.then((res) => res.json())
@@ -247,63 +403,72 @@ class Settings extends React.Component<SettingsProps, SettingsState> {
 			this.setState({beginCheckingAmount: data.checking})
 			this.setState({beginSavingsAmount: data.savings})
 		})
-
+	}
+	getCheckingCatgegories = (token:any) => {
 		fetch('http://localhost:4000/checkingCategories/', {
 			method: "GET",
 			headers: new Headers({
-				"Authorization": this.props.token,
+				"Authorization": token,
 				"Content-Type": "application/json",
 			}),
 		})
 		.then((res) => res.json())
 		.then((data) => {
 			// console.log(data);
-			this.setState({checkingCategories: [ ...this.state.checkingCategories, ...data ]})			  
+			this.setState({checkingCategories: data })			  
 		})
-
+	}
+	getCheckingTypes = (token:any) => {
 		fetch('http://localhost:4000/checkingTypes/', {
 			method: "GET",
 			headers: new Headers({
-				"Authorization": this.props.token,
+				"Authorization": token,
 				"Content-Type": "application/json",
 			}),
 		})
 		.then((res) => res.json())
 		.then((data) => {
 			// console.log(data);
-			this.setState({checkingTypes: [ ...this.state.checkingTypes, ...data ]})			  
-
-		})
-
-		fetch('http://localhost:4000/savingsCategories/', {
-			method: "GET",
-			headers: new Headers({
-				"Authorization": this.props.token,
-				"Content-Type": "application/json",
-			}),
-		})
-		.then((res) => res.json())
-		.then((data) => {
-			// console.log(data);
-			this.setState({savingsCategories: [ ...this.state.savingsCategories, ...data ]})			  
-		})
-
-		fetch('http://localhost:4000/savingsTypes/', {
-			method: "GET",
-			headers: new Headers({
-				"Authorization": this.props.token,
-				"Content-Type": "application/json",
-			}),
-		})
-		.then((res) => res.json())
-		.then((data) => {
-			// console.log(data);
-			this.setState({savingsTypes: [ ...this.state.savingsTypes, ...data ]})			  
+			this.setState({checkingTypes: data })			  
 
 		})
 	}
+	getSavingsCatgegories = (token:any) => {
+		fetch('http://localhost:4000/savingsCategories/', {
+			method: "GET",
+			headers: new Headers({
+				"Authorization": token,
+				"Content-Type": "application/json",
+			}),
+		})
+		.then((res) => res.json())
+		.then((data) => {
+			// console.log(data);
+			this.setState({savingsCategories: data })			  
+		})
+	}
+	
+	getSavingsTypes = (token:any) => {
+		fetch('http://localhost:4000/savingsTypes/', {
+			method: "GET",
+			headers: new Headers({
+				"Authorization": token,
+				"Content-Type": "application/json",
+			}),
+		})
+		.then((res) => res.json())
+		.then((data) => {
+			// console.log(data);
+			this.setState({savingsTypes: data })			  
+	
+		})
+	}
+
+	
+
 
 	render(){
+		const {errors} = this.state;
 		const {classes} = this.props;
 		return(
 			<div className="wrapper">
@@ -316,23 +481,23 @@ class Settings extends React.Component<SettingsProps, SettingsState> {
 					<Grid container spacing={3}>
 						<Grid item xs={6} sm={6}>
 							<TextField  onChange={this.handleInfoChange}  value={this.state.firstName} autoComplete="fname" name="firstName" variant="outlined" required fullWidth id="firstName" label="First Name" autoFocus />
-							{/* &nbsp;&nbsp;{this.state.errors.firstName === '' &&  <span style={{color: "red"}}>{this.state.errors.firstName}</span>} */}
+							{/* &nbsp;&nbsp;{errors.firstName === '' &&  <span style={{color: "red"}}>{errors.firstName}</span>} */}
 						</Grid>
 						<Grid item xs={6} sm={6}>
 							<TextField  onChange={this.handleInfoChange} value={this.state.lastName} variant="outlined" required fullWidth id="lastName" label="Last Name" name="lastName" autoComplete="lname" />
-							{/* &nbsp;&nbsp;{this.state.errors.lastName === '' &&  <span style={{color: "red"}}>{this.state.errors.lastName}</span>} */}
+							{/* &nbsp;&nbsp;{errors.lastName === '' &&  <span style={{color: "red"}}>{errors.lastName}</span>} */}
 						</Grid>
 						<Grid item xs={4} sm={4}>
 							<TextField  onChange={this.handleInfoChange} value={this.state.beginCheckingAmount} autoComplete="bcheckamt" name="beginCheckingAmount" variant="outlined" required fullWidth id="beginCheckingAmount" label="Begin Checking Amount" autoFocus />
-							&nbsp;&nbsp;{this.state.errors.beginCheckingAmount.length > 0 &&  <span style={{color: "red"}}>{this.state.errors.beginCheckingAmount}</span>}
+							&nbsp;&nbsp;{errors.beginCheckingAmount.length > 0 &&  <span style={{color: "red"}}>{errors.beginCheckingAmount}</span>}
 						</Grid>
 						<Grid item xs={4} sm={4}>
 							<TextField onChange={this.handleInfoChange} value={this.state.beginSavingsAmount}  variant="outlined" required fullWidth id="beginSavingsAmount" label="Begin Savings Amount" name="beginSavingsAmount" autoComplete="bsavamt" />
-							&nbsp;&nbsp;{this.state.errors.beginSavingsAmount.length > 0 &&  <span style={{color: "red"}}>{this.state.errors.beginSavingsAmount}</span>}
+							&nbsp;&nbsp;{errors.beginSavingsAmount.length > 0 &&  <span style={{color: "red"}}>{errors.beginSavingsAmount}</span>}
 						</Grid>
 						<Grid item xs={4} sm={4}>
 							<TextField  onChange={this.handleInfoChange} value={this.state.email} variant="outlined" required fullWidth id="email" label="Email Address" name="email" autoComplete="email" />
-							&nbsp;&nbsp;{this.state.errors.email.length > 0 &&  <span style={{color: "red"}}>{this.state.errors.email}</span>}
+							&nbsp;&nbsp;{errors.email.length > 0 &&  <span style={{color: "red"}}>{errors.email}</span>}
 						</Grid>
 					</Grid>
 					<br />
@@ -347,16 +512,14 @@ class Settings extends React.Component<SettingsProps, SettingsState> {
 							</Grid>
 						</Grid>
 					</Grid>
-				</form>
-				<br />
-				<form>
+					<br />
+					<br />
 					<Grid container spacing={3}>
 						<Grid item xs={6}>
 							<Button onClick={this.toggle}>Update Password?</Button>
 						</Grid>
 					</Grid>
-					<br />
-						{this.state.togglePassword === true ? 
+					{this.state.togglePassword === true ? 
 						<div>
 							<hr />
 							<br />
@@ -365,12 +528,12 @@ class Settings extends React.Component<SettingsProps, SettingsState> {
 
 							<Grid container spacing={3}>
 								<Grid item xs={6}>
-									<TextField  onChange={this.handleInfoUpdate}  variant="outlined" required fullWidth name="password" label="Password" type="text" id="password" autoComplete="current-password" />
+									<TextField  onChange={this.handleInfoChange}  variant="outlined" required fullWidth name="password" label="Password" type="text" id="password" autoComplete="current-password" />
 										&nbsp;&nbsp;{this.state.errors.password.length > 0 &&  <span style={{color: "red"}}>{this.state.errors.password}</span>}
 								</Grid>
 						
 								<Grid item xs={3}>
-									<Button onClick={this.handlePassUpdate} type="submit" fullWidth variant="contained" color="primary" >Update</Button>
+									<Button onClick={this.handleInfoUpdate} type="submit" fullWidth variant="contained" color="primary" >Update</Button>
 								</Grid>
 							</Grid>
 							<br />
@@ -379,6 +542,7 @@ class Settings extends React.Component<SettingsProps, SettingsState> {
 						: null
 						}
 				</form>
+				<br />
 				<br />
 				<Typography component="h4" variant="h6"><code>Update Categories/Types</code></Typography>
 				<br />
@@ -391,8 +555,8 @@ class Settings extends React.Component<SettingsProps, SettingsState> {
 									<Table>
 										<TableHead>
 											<TableRow>
-												<TableCell><TextField autoComplete="chcat" name="checkingCategory" variant="outlined" required fullWidth id="checkingCategory" label="Checking Category" autoFocus /></TableCell>
-												<TableCell><Button type="submit" fullWidth variant="contained" color="primary" >Add New</Button></TableCell>
+												<TableCell><TextField onChange={this.handleCategoryTypeChange} autoComplete="chcat" name="checkingCategory" variant="outlined" required fullWidth id="checkingCategory" label="Checking Category" autoFocus /></TableCell>
+												<TableCell><Button onClick={(e) => this.addCheckingCategory(e)} type="submit" fullWidth variant="contained" color="primary" >Add New</Button></TableCell>
 											</TableRow>
 										</TableHead>
 										<TableBody>
@@ -400,7 +564,7 @@ class Settings extends React.Component<SettingsProps, SettingsState> {
 											{this.state.checkingCategories.map((data, i) => (
 												<TableRow key={i}>
 													<TableCell>{data.checkingCategory}</TableCell>
-													<TableCell><Button type="submit" fullWidth variant="contained" color="primary" >Delete</Button></TableCell>
+													<TableCell><Button onClick={(e) => this.deleteCheckingCategory(e, data.id)} type="submit" fullWidth variant="contained" color="primary" >Delete</Button></TableCell>
 												</TableRow>
 											))}	
 											</TableRow>
@@ -418,8 +582,8 @@ class Settings extends React.Component<SettingsProps, SettingsState> {
 									<Table>
 										<TableHead>
 											<TableRow>
-												<TableCell><TextField autoComplete="svcat" name="savingsCategory" variant="outlined" required fullWidth id="savingsCategory" label="Savings Category" autoFocus /></TableCell>
-												<TableCell><Button type="submit" fullWidth variant="contained" color="primary" >Add New</Button></TableCell>
+												<TableCell><TextField onChange={this.handleCategoryTypeChange} autoComplete="svcat" name="savingsCategory" variant="outlined" required fullWidth id="savingsCategory" label="Savings Category" autoFocus /></TableCell>
+												<TableCell><Button onClick={(e) => this.addSavingsCategory(e)} type="submit" fullWidth variant="contained" color="primary" >Add New</Button></TableCell>
 											</TableRow>
 										</TableHead>
 										<TableBody>
@@ -427,7 +591,7 @@ class Settings extends React.Component<SettingsProps, SettingsState> {
 											{this.state.savingsCategories.map((data, i) => (
 												<TableRow key={i}>
 													<TableCell>{data.savingsCategory}</TableCell>
-													<TableCell><Button type="submit" fullWidth variant="contained" color="primary" >Delete</Button></TableCell>
+													<TableCell><Button onClick={(e) => this.deleteSavingsCategory(e, data.id)} type="submit" fullWidth variant="contained" color="primary" >Delete</Button></TableCell>
 												</TableRow>
 											))}	
 											</TableRow>
@@ -448,8 +612,8 @@ class Settings extends React.Component<SettingsProps, SettingsState> {
 									<Table>
 										<TableHead>
 											<TableRow>
-												<TableCell><TextField autoComplete="chtyp" name="checkingTypes" variant="outlined" required fullWidth id="checkingTypes" label="Checking Types" autoFocus /></TableCell>
-												<TableCell><Button type="submit" fullWidth variant="contained" color="primary" >Add New</Button></TableCell>
+												<TableCell><TextField onChange={this.handleCategoryTypeChange} autoComplete="chtyp" name="checkingType" variant="outlined" required fullWidth id="checkingType" label="Checking Type" autoFocus /></TableCell>
+												<TableCell><Button onClick={(e) => this.addCheckingType(e)} type="submit" fullWidth variant="contained" color="primary" >Add New</Button></TableCell>
 											</TableRow>
 										</TableHead>
 										<TableBody>
@@ -457,7 +621,7 @@ class Settings extends React.Component<SettingsProps, SettingsState> {
 											{this.state.checkingTypes.map((data, i) => (
 												<TableRow key={i}>
 													<TableCell>{data.checkingType}</TableCell>
-													<TableCell><Button type="submit" fullWidth variant="contained" color="primary" >Delete</Button></TableCell>
+													<TableCell><Button onClick={(e) => this.deleteCheckingTypes(e, data.id)} type="submit" fullWidth variant="contained" color="primary" >Delete</Button></TableCell>
 												</TableRow>
 											))}	
 											</TableRow>
@@ -475,8 +639,8 @@ class Settings extends React.Component<SettingsProps, SettingsState> {
 									<Table>
 										<TableHead>
 											<TableRow>
-												<TableCell><TextField autoComplete="svtypt" name="savingsTypes" variant="outlined" required fullWidth id="savingsTypes" label="Savings Types" autoFocus /></TableCell>
-												<TableCell><Button type="submit" fullWidth variant="contained" color="primary" >Add New</Button></TableCell>
+												<TableCell><TextField onChange={this.handleCategoryTypeChange} autoComplete="svtypt" name="savingsType" variant="outlined" required fullWidth id="savingsType" label="Savings Type" autoFocus /></TableCell>
+												<TableCell><Button onClick={(e) => this.addSavingsType(e)} type="submit" fullWidth variant="contained" color="primary" >Add New</Button></TableCell>
 											</TableRow>
 										</TableHead>
 										<TableBody>
@@ -484,7 +648,7 @@ class Settings extends React.Component<SettingsProps, SettingsState> {
 											{this.state.savingsTypes.map((data, i) => (
 												<TableRow key={i}>
 													<TableCell>{data.savingsType}</TableCell>
-													<TableCell><Button type="submit" fullWidth variant="contained" color="primary" >Delete</Button></TableCell>
+													<TableCell><Button onClick={(e) => this.deleteSavingsTypes(e, data.id)} type="submit" fullWidth variant="contained" color="primary" >Delete</Button></TableCell>
 												</TableRow>
 											))}	
 											</TableRow>

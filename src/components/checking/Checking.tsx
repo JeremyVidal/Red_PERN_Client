@@ -9,18 +9,23 @@ import Grid from '@material-ui/core/Grid';
 import { withStyles, createStyles, WithStyles, Theme } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
-// import { makeStyles } from '@material-ui/core/styles';
 import MenuItem from '@material-ui/core/MenuItem';
 import FormControl from '@material-ui/core/FormControl';
 import Typography from '@material-ui/core/Typography';
-
+import Dialog from '@material-ui/core/Dialog';
+import DialogActions from '@material-ui/core/DialogActions';
+import DialogContent from '@material-ui/core/DialogContent';
+import DialogContentText from '@material-ui/core/DialogContentText';
+import DialogTitle from '@material-ui/core/DialogTitle';
 
 interface CheckingProps extends WithStyles<typeof styles>{
-	userid: number,
 	token: string,
 }
 
 interface CheckingState {
+	editid: number,
+	editData: any[],
+	editopen: boolean,
 	categories: any[],
 	types: any[], 
 	checking: any[], 
@@ -31,6 +36,13 @@ interface CheckingState {
 	checkingName: string,
 	checkingDescription: string,
 	checkingAmount: number,
+	editCheckingDate: any,
+	editCheckingTime: any,
+	editCheckingCategory: string,
+	editCheckingType: string,
+	editCheckingName: string,
+	editCheckingDescription: string,
+	editCheckingAmount: number,
 	open: boolean,
 }
 
@@ -54,6 +66,9 @@ class Checking extends React.Component<CheckingProps, CheckingState> {
 	constructor(props: CheckingProps){
 		super(props);
 		this.state = {
+			editid: 0,
+			editData: [],
+			editopen: false,
 			categories: [], 
 			types: [], 
 			checking: [],
@@ -64,6 +79,13 @@ class Checking extends React.Component<CheckingProps, CheckingState> {
 			checkingName: '',
 			checkingDescription: '',
 			checkingAmount: 0,
+			editCheckingDate: null,
+			editCheckingTime: null,
+			editCheckingCategory: '',
+			editCheckingType: '',
+			editCheckingName: '',
+			editCheckingDescription: '',
+			editCheckingAmount: 0,
 			open: false,
 		}
 		this.handleDateChange = this.handleDateChange.bind(this);
@@ -75,22 +97,99 @@ class Checking extends React.Component<CheckingProps, CheckingState> {
 		this.handleAmountChange = this.handleAmountChange.bind(this);
 		this.handleSubmit = this.handleSubmit.bind(this);
 		this.getData = this.getData.bind(this);
-		this.editRecord = this.editRecord.bind(this);
 		this.deleteRecord = this.deleteRecord.bind(this);
 		this.getModalStyle = this.getModalStyle.bind(this);
 		this.getModalStyle = this.getModalStyle.bind(this);
 		this.rand = this.rand.bind(this);
-		this.handleOpen = this.handleOpen.bind(this);
-		this.handleClose = this.handleClose.bind(this);
+		this.handleEditClickOpen = this.handleEditClickOpen.bind(this);
+		this.handleEditClickClose = this.handleEditClickClose.bind(this);
 		this.modalBoday = this.modalBoday.bind(this);
+		this.handleEditUpdate = this.handleEditUpdate.bind(this);
+		this.getEditData = this.getEditData.bind(this);
+		this.handleUpdateSubmit = this.handleUpdateSubmit.bind(this);
 
 	}
-	handleOpen = () => {
-		this.setState({open: true});
+	handleUpdateSubmit = (event:any, id:number) => {
+		event.preventDefault();
+		// console.log(this.state.editCheckingName);
+		fetch(`http://localhost:4000/checking/update/${id}`, {
+			method: "PUT",
+			body: JSON.stringify({						
+				checkingDate: this.state.editCheckingDate,
+				checkingTime: this.state.editCheckingTime,
+				checkingCategory: this.state.editCheckingCategory,
+				checkingType: this.state.editCheckingType,
+				checkingName: this.state.editCheckingName,
+				checkingDescription: this.state.editCheckingDescription,
+				checkingAmount: this.state.editCheckingAmount,
+			}),
+			headers: new Headers({
+				"Content-Type": "application/json",
+				'Accept': 'application/json',
+				"Authorization": this.props.token,
+			}),
+		})
+		.then(() => {
+			this.getData(this.props.token);
+			this.handleEditClickClose()
+		})
+	}
+	getEditData = (id:number) => {
+		fetch(`http://localhost:4000/checking/${id}`, {
+			method: "GET",
+			headers: new Headers({
+				"Authorization": this.props.token,
+				"Content-Type": "application/json",
+			}),
+		})
+		.then((res) => res.json())
+		.then((data) => {
+			// console.log(data);
+			this.setState({editCheckingDate: data.checkingDate})	
+			this.setState({editCheckingTime: data.checkingTime})	
+			this.setState({editCheckingCategory: data.checkingCategory})	
+			this.setState({editCheckingType: data.checkingType})	
+			this.setState({editCheckingName: data.checkingName})	
+			this.setState({editCheckingDescription: data.checkingDescription})	
+			this.setState({editCheckingAmount: data.checkingAmount})	
+			// console.log(data)	  
+		})
+	}
+
+	handleEditUpdate =(id:number) => {
+		fetch(`http://localhost:4000/checking/update/${id}`, {
+			method: "PUT",
+			body: JSON.stringify({		
+				checkingDate: this.state.editCheckingDate,
+				checkingTime: this.state.editCheckingTime,
+				checkingCategory: this.state.editCheckingCategory,
+				checkingType: this.state.editCheckingType,
+				checkingName: this.state.editCheckingName,
+				checkingDescription: this.state.editCheckingDescription,
+				checkingAmount: this.state.editCheckingAmount,
+			}),
+			headers: new Headers({
+				"Content-Type": "application/json",
+				'Accept': 'application/json',
+				"Authorization": this.props.token,
+			}),
+			})
+			.then(() => {
+				this.getData(this.props.token);
+			})
+	}
+	handleEditClickOpen = (event:any, id:number) => {
+		event.preventDefault();
+		this.getEditData(id);
+		this.setState({editid: id})
+		this.setState({editopen: true});
+		// console.log(this.state.editData)
 	};
 	
-	handleClose = () => {
-		this.setState({open: false});
+	handleEditClickClose = () => {
+		this.setState({editopen: false});
+		this.setState({editData: []})
+		this.setState({editid: 0})
 	};
 	rand() {
 		return Math.round(Math.random() * 20) - 10;
@@ -120,13 +219,12 @@ class Checking extends React.Component<CheckingProps, CheckingState> {
 					'Authorization': this.props.token
 				})
 			})
-		.then(res => res.json())
-		.catch(err => console.log(err))}
+			.then(() => {
+				this.getData(this.props.token);
+			})
+			.catch(err => console.log(err))}
 	}
-	editRecord = (event:any, id:number) => {
-		event.preventDefault();
-		console.log(`THIS IS THE RECORD ID: ${id}`)
-	}
+
 	handleDateChange = (event: any) => {
 		event.preventDefault();
 		this.setState({checkingDate: event.target.value})
@@ -156,6 +254,12 @@ class Checking extends React.Component<CheckingProps, CheckingState> {
 		this.setState({checkingAmount: event.target.value})
 	};
 
+	handleUpdatehange = (event : any) => {
+		event.preventDefault();
+		const { name, value } = event.target;
+		this.setState(Object.assign(this.state, {[name]: value}));
+	}
+
 	handleSubmit = (event:any) => {
 		event.preventDefault();
 		fetch('http://localhost:4000/checking/create', {
@@ -183,7 +287,7 @@ class Checking extends React.Component<CheckingProps, CheckingState> {
 				this.setState({checkingName: ''})
 				this.setState({checkingDescription: ''})
 				this.setState({checkingAmount: 0})
-				// this.getData(this.props.token);
+				this.getData(this.props.token);
 			})
 	}
 	componentDidMount = () => {
@@ -200,7 +304,7 @@ class Checking extends React.Component<CheckingProps, CheckingState> {
 		.then((res) => res.json())
 		.then((data) => {
 			// console.log(data);
-			this.setState({categories: [ ...this.state.categories, ...data ]})			  
+			this.setState({categories: data})			  
 		})
 		fetch('http://localhost:4000/checkingTypes/', {
 			method: "GET",
@@ -212,7 +316,7 @@ class Checking extends React.Component<CheckingProps, CheckingState> {
 		.then((res) => res.json())
 		.then((data) => {
 			// console.log(data);
-			this.setState({types: [ ...this.state.types, ...data ]})			  
+			this.setState({types: data})			  
 
 		})
 		fetch('http://localhost:4000/checking', {
@@ -225,7 +329,7 @@ class Checking extends React.Component<CheckingProps, CheckingState> {
 		.then((res) => res.json())
 		.then((data) => {
 			// console.log(data);
-			this.setState({checking: [ ...this.state.checking, ...data ]})			  
+			this.setState({checking: data})			  
 		})
 	}
 	render(){
@@ -342,6 +446,7 @@ class Checking extends React.Component<CheckingProps, CheckingState> {
 							</Grid>
 						</FormControl>
 						<br />
+						<FormControl>
 							<Grid container spacing={3}>
 								<Grid item xs={12}>
 									<TextField
@@ -358,13 +463,12 @@ class Checking extends React.Component<CheckingProps, CheckingState> {
 									/>
 								</Grid>
 							</Grid>
-						<Grid container spacing={3}>
-							<Grid item xs={12}>
-								<FormControl>
-									<Button className={classes.submit} type="submit" fullWidth variant="contained" color="primary" >Add</Button>
-								</FormControl>
+							<Grid container spacing={3}>
+								<Grid item xs={12}>
+										<Button className={classes.submit} type="submit" fullWidth variant="contained" color="primary" >Add</Button>
+								</Grid>
 							</Grid>
-						</Grid>
+						</FormControl>
 					</div>
 				</form>
 				<Grid container spacing={3}>
@@ -388,6 +492,7 @@ class Checking extends React.Component<CheckingProps, CheckingState> {
 									</TableRow>
 								</TableHead>
 								<TableBody>
+
 									{this.state.checking.map((data, i) => (
 									<TableRow key={i}>
 										<TableCell>{data.checkingDate}</TableCell>
@@ -397,7 +502,7 @@ class Checking extends React.Component<CheckingProps, CheckingState> {
 										<TableCell>{data.checkingName}</TableCell>
 										{/* <TableCell>{data.checkingDescription}</TableCell> */}
 										<TableCell>${data.checkingAmount}</TableCell>
-										<TableCell><Button onClick={(e) => this.editRecord(e, data.id) } type="submit" variant="contained" color="primary" >Edit</Button></TableCell>
+										<TableCell><Button onClick={(e) => this.handleEditClickOpen(e, data.id) } type="submit" variant="contained" color="primary" >Edit</Button></TableCell>
 										<TableCell><Button onClick={(e) => this.deleteRecord(e, data.id) } type="submit" variant="contained" color="primary" >Delete</Button></TableCell>
 									</TableRow>
 									))}	
@@ -406,6 +511,165 @@ class Checking extends React.Component<CheckingProps, CheckingState> {
 						</TableContainer>
 					</Grid>
 				</Grid>
+
+				<Dialog
+					open={this.state.editopen}
+					onClose={this.handleEditClickClose}
+					aria-labelledby="alert-dialog-title"
+					aria-describedby="alert-dialog-description"
+				>
+					<DialogTitle id="alert-dialog-title">{"Checking transaction update!"}</DialogTitle>
+					<DialogContent>
+					<DialogContentText id="alert-dialog-description">
+						
+					<form className={classes.root} autoComplete="off">
+      				<div>
+					<Typography component="h1" variant="h5">Update Checking Transaction</Typography>
+
+						<FormControl>
+							<Grid container spacing={3}>
+							<Grid item xs={6}>
+								<TextField
+									id="standard-required"
+									required
+									label="Date"
+									name="editCheckingDate"
+									value= {this.state.editCheckingDate}
+									variant="outlined"
+									InputLabelProps={{
+										shrink: true,
+									}}
+									onChange={this.handleUpdatehange}
+								/>
+							</Grid>
+							<Grid item xs={6}>
+								<TextField
+									id="standard-required"
+									required
+									label="Time"
+									name="editCheckingTime"
+									value= {this.state.editCheckingTime}
+									variant="outlined"
+									InputLabelProps={{
+										shrink: true,
+									}}
+									onChange={this.handleUpdatehange}
+								/>
+							</Grid>
+						</Grid>
+						</FormControl>
+						<br />
+						<FormControl>
+							<Grid container spacing={3}>
+								<Grid item xs={6}>
+									<TextField
+										id="standard-select"
+										required
+										select
+										label="Category"
+										name="editCheckingCategory"
+										value= {this.state.editCheckingCategory}
+										InputLabelProps={{
+											shrink: true,
+										}}
+										onChange={this.handleUpdatehange}
+										>
+										{this.state.categories.map((item) => (
+											<MenuItem key={item.id} value={item.checkingCategory}>
+											{item.checkingCategory}
+											</MenuItem>
+										))}
+									</TextField>
+								</Grid>
+								<Grid item xs={6}>
+									<TextField
+										id="standard-select"
+										required
+										select
+										label="Type"
+										name="editCheckingType"
+										value= {this.state.editCheckingType}
+										InputLabelProps={{
+											shrink: true,
+										}}
+										onChange={this.handleUpdatehange}
+										>
+										{this.state.types.map((item) => (
+											<MenuItem key={item.id} value={item.checkingType}>
+											{item.checkingType}
+											</MenuItem>
+										))}
+									</TextField>
+								</Grid>
+							</Grid>
+						</FormControl>
+						<br />
+						<FormControl>
+							<Grid container spacing={3}>
+								<Grid item xs={6}>
+									<TextField
+										id="standard-required"
+										required
+										label="Name"
+										name="editCheckingName"
+										value= {this.state.editCheckingName}
+										variant="outlined"
+										InputLabelProps={{
+											shrink: true,
+										}}
+										onChange={this.handleUpdatehange}
+									/>
+								</Grid>
+								<Grid item xs={6}>
+									<TextField
+										id="outlined-number"
+										required
+										label="Amount"
+										type="number"
+										name="editCheckingAmount"
+										value= {this.state.editCheckingAmount}
+										variant="outlined"
+										InputLabelProps={{
+											shrink: true,
+										}}
+										onChange={this.handleUpdatehange}
+									/>
+								</Grid>
+							</Grid>
+						</FormControl>
+						<br />
+							<Grid container spacing={3}>
+								<Grid item xs={12}>
+									<TextField
+										id="standard-required"
+										label="Description"
+										value= {this.state.editCheckingDescription}
+										variant="outlined"
+										name="editCheckingDescription"
+										multiline
+										rowsMax={4}
+										InputLabelProps={{
+											shrink: true,
+										}}
+										onChange={this.handleUpdatehange}
+									/>
+								</Grid>
+							</Grid>
+					</div>
+				</form>
+					</DialogContentText>
+					</DialogContent>
+					<DialogActions>
+					<Button onClick={this.handleEditClickClose} color="primary">
+						No Close
+					</Button>
+					<Button  onClick={(e) => this.handleUpdateSubmit(e,this.state.editid)} color="primary" autoFocus>
+						Update
+					</Button>
+					</DialogActions>
+				</Dialog>
+
+
 			</div>
 		)
 	}

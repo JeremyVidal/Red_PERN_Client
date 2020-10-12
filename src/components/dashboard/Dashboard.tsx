@@ -10,11 +10,9 @@ import { withStyles, createStyles, WithStyles, Theme } from '@material-ui/core/s
 
 
 interface DashProps extends WithStyles<typeof styles> {
-	userid: number,
 	token: string,
 }
 interface DashState {
-	user_id: any,
 	checking: any[], 
 	savings: any[], 
 	
@@ -30,7 +28,6 @@ class Dashboard extends React.Component<DashProps, DashState> {
 	constructor(props: DashProps){
 		super(props);
 		this.state = {
-			user_id: 0, // ??????? how to set this to be defaulted to the incoming prop
 			checking: [],
 			savings: [],
 		}
@@ -47,7 +44,6 @@ class Dashboard extends React.Component<DashProps, DashState> {
 		.then((res) => res.json())
 		.then((data) => {
 			// console.log(data);
-			this.setState({user_id: this.props.userid})
 			this.setState({checking: [ ...this.state.checking, ...data ]})			  
 		})
 		
@@ -82,7 +78,7 @@ class Dashboard extends React.Component<DashProps, DashState> {
 										<TableCell>Category</TableCell>
 										<TableCell>Type</TableCell>
 										<TableCell>Name</TableCell>
-										{/* <TableCell>Description</TableCell> */}
+										<TableCell>Description</TableCell>
 										<TableCell>Amount</TableCell>
 									</TableRow>
 								</TableHead>
@@ -94,7 +90,7 @@ class Dashboard extends React.Component<DashProps, DashState> {
 										<TableCell>{data.checkingCategory}</TableCell>
 										<TableCell>{data.checkingType}</TableCell>
 										<TableCell>{data.checkingName}</TableCell>
-										{/* <TableCell>{data.checkingDescription}</TableCell> */}
+										<TableCell>{data.checkingDescription}</TableCell>
 										<TableCell>${data.checkingAmount}</TableCell>
 									</TableRow>
 									))}	
@@ -114,7 +110,7 @@ class Dashboard extends React.Component<DashProps, DashState> {
 										<TableCell>Category</TableCell>
 										<TableCell>Type</TableCell>
 										<TableCell>Name</TableCell>
-										{/* <TableCell>Description</TableCell> */}
+										<TableCell>Description</TableCell>
 										<TableCell>Amount</TableCell>
 									</TableRow>
 								</TableHead>
@@ -126,7 +122,7 @@ class Dashboard extends React.Component<DashProps, DashState> {
 										<TableCell>{data.savingsCategory}</TableCell>
 										<TableCell>{data.savingsType}</TableCell>
 										<TableCell>{data.savingsName}</TableCell>
-										{/* <TableCell>{data.savingsDescription}</TableCell> */}
+										<TableCell>{data.savingsDescription}</TableCell>
 										<TableCell>${data.savingsAmount}</TableCell>
 									</TableRow>
 									))}	

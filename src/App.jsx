@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import './App.css';
 import Auth from './components/auth/Auth';
 import Admin from './components/admin/Admin';
@@ -8,26 +8,29 @@ import NavBar from './components/site/NavBar';
 function App() {
 	const [sessionToken, setSessionToken] = useState('');
 	const [admin, setAdmin] = useState();
-	const [userid, setUserid] = useState();
 
 	const updateToken = (newToken, newAdmin, newUserid) => {
-		// localStorage.setItem("token", newToken);
+		localStorage.setItem("token", newToken);
 		setSessionToken(newToken);
 		// localStorage.setItem("admin", newAdmin);
 		setAdmin(newAdmin);
-		// localStorage.setItem("userid", newUserid);
-		setUserid(newUserid);
 	};
 	const clearToken = () => {
-		// localStorage.clear();
+		localStorage.clear();
 		setSessionToken("");
 		setAdmin(false);
-		setUserid('');
 	};
 
+	useEffect(() => {
+
+		if (localStorage.getItem('token')){
+			setSessionToken(localStorage.getItem('token')) 
+		}
+	  }, []);
+	
 	const protectedViews = () => {
 		return admin ? (<Admin clearToken={clearToken}/>) 
-		: sessionToken !== '' ? (<NavBar admin={admin} token={sessionToken} userid={userid} clearToken={clearToken}/>) 
+		: sessionToken  ? (<NavBar admin={admin} token={sessionToken} clearToken={clearToken}/>) 
 		: (<Auth updateToken={updateToken} clearToken={clearToken}/>);
 	};
 

@@ -109,9 +109,14 @@ class Auth extends React.Component<AuthProps, AuthState> {
 		event.preventDefault();
 		if (this.state.login === false){
 			this.setState({login: true});
+			this.setState({email: ''});
+			this.setState({password: ''});
+
 		}
 		else if(this.state.login === true){
 			this.setState({login: false});
+			this.setState({email: ''});
+			this.setState({password: ''});
 		}
 		if (this.state.inputType === 'password'){
 			this.setState({inputType: 'text'});
