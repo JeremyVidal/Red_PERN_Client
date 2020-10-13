@@ -6,7 +6,6 @@ import Dashboard from '../dashboard/Dashboard';
 import Checking from '../checking/Checking';
 import Savings from '../savings/Savings';
 import Settings from '../mysettings/Settings';
-import Admin from '../admin/Admin';
 import { makeStyles } from '@material-ui/core/styles';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
@@ -23,7 +22,11 @@ interface NavBarProps {
 interface NavBarState {
 	firstName: string, 
 	lastName: string, 
-	admin: boolean,
+	beginChecking: number | null,
+	beginSavings: number | null,
+	incomeTotal: number | null,
+	checkingTotal: number | null,
+	savingsTotal: number | null,
 
 }
 const history = createBrowserHistory();
@@ -33,7 +36,11 @@ class NavBar extends React.Component<NavBarProps, NavBarState> {
 		this.state = {
 			firstName: '', 
 			lastName: '', 
-			admin: false,
+			beginChecking: null,
+			beginSavings: null,
+			incomeTotal: null,
+			checkingTotal: null,
+			savingsTotal: null,
 		}
 		this.useStyles = this.useStyles.bind(this);
 		this.getData = this.getData.bind(this);
@@ -68,19 +75,15 @@ class NavBar extends React.Component<NavBarProps, NavBarState> {
 			this.setState({firstName: data.firstName})
 			this.setState({lastName: data.lastName})
 		})
-		this.setState({admin: this.props.admin})
 	}
 
 	
 	render(){
 		return(
 			<div>
-				{
-				this.state.admin === true ? 
-					<Switch>
-						<Route exact path="/admin"><Admin clearToken={this.props.clearToken}/></Route>
-					</Switch>
-				: null}
+			
+				
+		
 				<Router history={history}>
 					    <AppBar position="fixed" className="myNavBar">
 							<Toolbar>
@@ -95,6 +98,7 @@ class NavBar extends React.Component<NavBarProps, NavBarState> {
 								<Button color="inherit" onClick={this.props.clearToken}><Link to=''>Logout</Link></Button>
 							</Toolbar>
 						</AppBar>
+						{/* This is where the liquid totals go */}
 				<Switch>
 					<Route exact path="/dashboard"><Dashboard token={this.props.token} /></Route>
 					<Route exact path="/"><Dashboard token={this.props.token} /></Route>
