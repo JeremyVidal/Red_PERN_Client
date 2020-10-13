@@ -562,9 +562,9 @@ class Settings extends React.Component<SettingsProps, SettingsState> {
 				<br />
 				<Grid container spacing={3}>
 					<Grid item xs={6}>
+						<Typography component="h3" variant="h6">Checking Categories</Typography>
 						<Card className={classes.cardRoot}>
 							<CardContent>
-								<Typography component="h3" variant="h6">Checking Categories</Typography>
 								<TableContainer>
 									<Table>
 										<TableHead>
@@ -589,9 +589,9 @@ class Settings extends React.Component<SettingsProps, SettingsState> {
 						</Card>
 					</Grid>
 					<Grid item xs={6}>		
+						<Typography component="h3" variant="h6">Savings Categories</Typography>
 						<Card className={classes.cardRoot}>
 							<CardContent>
-								<Typography component="h3" variant="h6">Savings Categories</Typography>
 								<TableContainer>
 									<Table>
 										<TableHead>
@@ -619,9 +619,9 @@ class Settings extends React.Component<SettingsProps, SettingsState> {
 				<br />
 				<Grid container spacing={3}>
 					<Grid item xs={6}>
+					<Typography component="h3" variant="h6">Checking Types</Typography>
 						<Card className={classes.cardRoot} >
 							<CardContent>
-								<Typography component="h3" variant="h6">Checking Types</Typography>
 								<TableContainer>
 									<Table>
 										<TableHead>
@@ -646,9 +646,9 @@ class Settings extends React.Component<SettingsProps, SettingsState> {
 						</Card>
 					</Grid>
 					<Grid item xs={6}>		
+						<Typography component="h3" variant="h6">Savings Types</Typography>
 						<Card className={classes.cardRoot}>
 							<CardContent>
-								<Typography component="h3" variant="h6">Savings Types</Typography>
 								<TableContainer>
 									<Table>
 										<TableHead>
