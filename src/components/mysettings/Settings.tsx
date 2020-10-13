@@ -8,10 +8,8 @@ import TableCell from '@material-ui/core/TableCell';
 import TableContainer from '@material-ui/core/TableContainer';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
-import FormControl from '@material-ui/core/FormControl';
 import Typography from '@material-ui/core/Typography';
 import Card from '@material-ui/core/Card';
-import CardActions from '@material-ui/core/CardActions';
 import CardContent from '@material-ui/core/CardContent';
 import { withStyles, createStyles, WithStyles, Theme } from '@material-ui/core/styles';
 import Dialog from '@material-ui/core/Dialog';
@@ -29,6 +27,7 @@ interface SettingsProps extends WithStyles<typeof styles>{
 
 interface SettingsState {
 	open: boolean,
+	updateMessage: string,
 	checkingCategory: string,
 	savingsCategory: string,
 	checkingType: string,
@@ -59,6 +58,8 @@ interface SettingsState {
 const styles = ({ palette, spacing}: Theme) => createStyles({
 	cardRoot: {
 		minWidth: 275,
+		maxHeight: 500,
+		overflowY: 'scroll',
 	},
 	bullet: {
 		display: 'inline-block',
@@ -67,6 +68,10 @@ const styles = ({ palette, spacing}: Theme) => createStyles({
 	},
 	title: {
 		fontSize: 14,
+	},
+	cardheight: {
+		maxHeight: 300,
+		overflowY: 'scroll',
 	},
 	pos: {
 		marginBottom: 12,
@@ -78,6 +83,7 @@ class Settings extends React.Component<SettingsProps, SettingsState> {
 		super(props);
 		this.state = {
 			open: false,
+			updateMessage: '',
 			checkingCategory: '',
 			savingsCategory: '',
 			checkingType: '',
@@ -343,11 +349,13 @@ class Settings extends React.Component<SettingsProps, SettingsState> {
 				})
 			.then((response) => response.json())
 			.then(() => 
+				this.setState({updateMessage: 'Successfully Updated Your Information!'}),
 				this.state.password !== '' && this.state.password !== null && this.state.password !== undefined 
 				? this.props.clearToken()
 				: null
-			)
-		}
+				)
+			}
+			
 		else{
 			this.setState({firstName: ''})
 			this.setState({lastName: ''})
@@ -500,6 +508,11 @@ class Settings extends React.Component<SettingsProps, SettingsState> {
 							&nbsp;&nbsp;{errors.email.length > 0 &&  <span style={{color: "red"}}>{errors.email}</span>}
 						</Grid>
 					</Grid>
+					<Grid container spacing={2}>
+						<Grid item xs={12} sm={6}>
+							<code>{this.state.updateMessage}</code>
+						</Grid>
+					</Grid>
 					<br />
 					<br />
 					<Grid container spacing={3}>	
@@ -605,7 +618,7 @@ class Settings extends React.Component<SettingsProps, SettingsState> {
 				<br />
 				<Grid container spacing={3}>
 					<Grid item xs={6}>
-						<Card className={classes.cardRoot}>
+						<Card className={classes.cardRoot} >
 							<CardContent>
 								<Typography component="h3" variant="h6">Checking Types</Typography>
 								<TableContainer>

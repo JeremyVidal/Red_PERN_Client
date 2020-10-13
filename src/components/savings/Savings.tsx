@@ -56,6 +56,10 @@ const styles = ({ palette, spacing}: Theme) => createStyles({
 	table: {
 		minWidth: 650,
 	},
+	tablecontainer: {
+		maxHeight: 500,
+		overflowY: 'scroll',
+	},
 	submit: {
 		margin: spacing(3, 0, 2),
 	},
@@ -473,7 +477,7 @@ class Savings extends React.Component<SavingsProps, SavingsState> {
 				</form>
 				<Grid container spacing={3}>
 					<Grid item xs={12}>
-						<TableContainer>
+						<TableContainer className={classes.tablecontainer}>
 							<br />
 							<Typography component="h1" variant="h5">Savings Transactions</Typography>
 							<Table className={classes.table} size="small" aria-label="a dense table">

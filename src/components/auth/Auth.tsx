@@ -20,6 +20,7 @@ interface AuthProps extends WithStyles<typeof styles> {
  }
  interface AuthState {
 	login: boolean,
+	message: string,
 	inputType: string,
 	firstName : string,
 	lastName: string,
@@ -66,7 +67,7 @@ interface AuthProps extends WithStyles<typeof styles> {
 		backgroundColor: 'white',
 	},
 	form: {
-	  width: '100%', // Fix IE 11 issue.
+	  width: '100%',
 	  marginTop: spacing(3),
 	},
 	submit: {
@@ -80,6 +81,7 @@ class Auth extends React.Component<AuthProps, AuthState> {
 		super(props);
 		const initialState = {
 			login: true,
+			message: '',
 			inputType: 'password',
 			firstName: '',
 			lastName: '',
@@ -189,15 +191,18 @@ class Auth extends React.Component<AuthProps, AuthState> {
 					}),
 					body: JSON.stringify(userAmount),
 				})
+				this.setState({message: ''})
 				// console.log(data.sessionToken);
 				// console.log(data.user.admin);
 				// console.log(data.user.id);
 
 			})
-			.catch((err) => console.log(err));
+			.catch(() => this.setState({message: 'Authentication Error!'})
+			);
 		}
 		else{
-			console.log("Authentication Error!!!")
+			this.setState({message: 'Authentication Error!'})
+			// console.log("Authentication Error!")
 			this.setState({firstName: ''});
 			this.setState({lastName: ''});
 			this.setState({beginCheckingAmount: 0});
@@ -232,51 +237,54 @@ class Auth extends React.Component<AuthProps, AuthState> {
 			<div className={classes.paper}>
 				<Typography component="h1" variant="h5"><code>Welcome to Budget Tracker</code></Typography>
 				<br />
-				  <Avatar className={classes.avatar}>
-					{this.state.login === true ? 
-						<LockOutlinedIcon />
-					:
-						<LockOpenIcon />
-					}
-				  </Avatar>
-				  <Typography component="h1" variant="h5">
-					  {this.title()}
-				  </Typography>
-				  <form className={classes.form} onSubmit={this.handleSubmit}>
-
-					{this.state.login === false ? (
+				  	<Avatar className={classes.avatar}>
+						{this.state.login === true ? 
+							<LockOutlinedIcon />
+						:
+							<LockOpenIcon />
+						}
+				 	</Avatar>
+				  	<Typography component="h1" variant="h5">
+					  	{this.title()}
+				  	</Typography>
+				  	<form className={classes.form} onSubmit={this.handleSubmit}>
+						{this.state.login === false ? (
+							<Grid container spacing={2}>
+								<Grid item xs={12} sm={6}>
+									<TextField onChange={this.handleChange} className={classes.input} autoComplete="fname" name="firstName" variant="outlined" required fullWidth id="firstName" label="First Name" autoFocus />
+									{/* &nbsp;&nbsp;{errors.firstName === '' &&  <span style={{color: "red"}}>{errors.firstName}</span>} */}
+								</Grid>
+								<Grid item xs={12} sm={6}>
+									<TextField onChange={this.handleChange} className={classes.input} variant="outlined" required fullWidth id="lastName" label="Last Name" name="lastName" autoComplete="lname" />
+									{/* &nbsp;&nbsp;{errors.lastName === '' &&  <span style={{color: "red"}}>{errors.lastName}</span>} */}
+								</Grid>
+								<Grid item xs={12} sm={6}>
+									<TextField onChange={this.handleChange} className={classes.input} autoComplete="bcheckamt" name="beginCheckingAmount" variant="outlined" required fullWidth id="beginCheckingAmount" label="Begin Checking Amount" autoFocus />
+									&nbsp;&nbsp;{errors.beginCheckingAmount.length > 0 &&  <span style={{color: "red"}}>{errors.beginCheckingAmount}</span>}
+								</Grid>
+								<Grid item xs={12} sm={6}>
+									<TextField onChange={this.handleChange} className={classes.input} variant="outlined" required fullWidth id="beginSavingsAmount" label="Begin Savings Amount" name="beginSavingsAmount" autoComplete="bsavamt" />
+									&nbsp;&nbsp;{errors.beginSavingsAmount.length > 0 &&  <span style={{color: "red"}}>{errors.beginSavingsAmount}</span>}
+								</Grid>
+							</Grid>
+						) : null}
 						<Grid container spacing={2}>
-
-							<Grid item xs={12} sm={6}>
-								<TextField onChange={this.handleChange} className={classes.input} autoComplete="fname" name="firstName" variant="outlined" required fullWidth id="firstName" label="First Name" autoFocus />
-								{/* &nbsp;&nbsp;{errors.firstName === '' &&  <span style={{color: "red"}}>{errors.firstName}</span>} */}
+							<Grid item xs={12}>
+								<TextField onChange={this.handleChange} className={classes.input} variant="outlined" required fullWidth id="email" label="Email Address" name="email" autoComplete="email" />
+								&nbsp;&nbsp;{errors.email.length > 0 &&  <span style={{color: "red"}}>{errors.email}</span>}
 							</Grid>
-							<Grid item xs={12} sm={6}>
-								<TextField onChange={this.handleChange} className={classes.input} variant="outlined" required fullWidth id="lastName" label="Last Name" name="lastName" autoComplete="lname" />
-								{/* &nbsp;&nbsp;{errors.lastName === '' &&  <span style={{color: "red"}}>{errors.lastName}</span>} */}
-							</Grid>
-							<Grid item xs={12} sm={6}>
-								<TextField onChange={this.handleChange} className={classes.input} autoComplete="bcheckamt" name="beginCheckingAmount" variant="outlined" required fullWidth id="beginCheckingAmount" label="Begin Checking Amount" autoFocus />
-								&nbsp;&nbsp;{errors.beginCheckingAmount.length > 0 &&  <span style={{color: "red"}}>{errors.beginCheckingAmount}</span>}
-							</Grid>
-							<Grid item xs={12} sm={6}>
-								<TextField onChange={this.handleChange} className={classes.input} variant="outlined" required fullWidth id="beginSavingsAmount" label="Begin Savings Amount" name="beginSavingsAmount" autoComplete="bsavamt" />
-								&nbsp;&nbsp;{errors.beginSavingsAmount.length > 0 &&  <span style={{color: "red"}}>{errors.beginSavingsAmount}</span>}
+							<Grid item xs={12}>
+								<TextField onChange={this.handleChange} className={classes.input} variant="outlined" required fullWidth name="password" label="Password" type="password" id="password" autoComplete="current-password" />
+								&nbsp;&nbsp;{errors.password.length > 0 &&  <span style={{color: "red"}}>{errors.password}</span>}
 							</Grid>
 						</Grid>
-					) : null}
-					<Grid container spacing={2}>
-						<Grid item xs={12}>
-							<TextField onChange={this.handleChange} className={classes.input} variant="outlined" required fullWidth id="email" label="Email Address" name="email" autoComplete="email" />
-							&nbsp;&nbsp;{errors.email.length > 0 &&  <span style={{color: "red"}}>{errors.email}</span>}
+						<Grid container spacing={2}>
+							<Grid item xs={12} sm={6}>
+								<code>{this.state.message}</code>
+							</Grid>
 						</Grid>
-						<Grid item xs={12}>
-							<TextField onChange={this.handleChange} className={classes.input} variant="outlined" required fullWidth name="password" label="Password" type="password" id="password" autoComplete="current-password" />
-							&nbsp;&nbsp;{errors.password.length > 0 &&  <span style={{color: "red"}}>{errors.password}</span>}
-						</Grid>
-					</Grid>
-					<Button className={classes.submit} type="submit" fullWidth variant="contained" color="primary" >{this.title()}</Button>
-					<Button onClick={this.toggle} className={classes.submit} type="submit" fullWidth variant="contained" color="primary" >{this.label()}</Button>
+						<Button className={classes.submit} type="submit" fullWidth variant="contained" color="primary" >{this.title()}</Button>
+						<Button onClick={this.toggle} className={classes.submit} type="submit" fullWidth variant="contained" color="primary" >{this.label()}</Button>
 				  </form>
 			</div>
 			<Box mt={5}>

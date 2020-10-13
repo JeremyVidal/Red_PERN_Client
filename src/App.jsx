@@ -7,12 +7,12 @@ import NavBar from './components/site/NavBar';
 
 function App() {
 	const [sessionToken, setSessionToken] = useState('');
-	const [admin, setAdmin] = useState();
+	const [admin, setAdmin] = useState(false);
 
-	const updateToken = (newToken, newAdmin, newUserid) => {
+	const updateToken = (newToken, newAdmin) => {
 		localStorage.setItem("token", newToken);
 		setSessionToken(newToken);
-		// localStorage.setItem("admin", newAdmin);
+		localStorage.setItem("admin", newAdmin);
 		setAdmin(newAdmin);
 	};
 	const clearToken = () => {
@@ -26,11 +26,14 @@ function App() {
 		if (localStorage.getItem('token')){
 			setSessionToken(localStorage.getItem('token')) 
 		}
+		// if (localStorage.getItem('admin')){
+		// 	setAdmin(localStorage.getItem('admin')) 
+		// }
 	  }, []);
 	
 	const protectedViews = () => {
 		return admin ? (<Admin clearToken={clearToken}/>) 
-		: sessionToken  ? (<NavBar admin={admin} token={sessionToken} clearToken={clearToken}/>) 
+		: sessionToken ? (<NavBar admin={admin} token={sessionToken} clearToken={clearToken}/>) 
 		: (<Auth updateToken={updateToken} clearToken={clearToken}/>);
 	};
 

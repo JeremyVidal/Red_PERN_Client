@@ -5,17 +5,13 @@ import { createBrowserHistory } from 'history';
 import Dashboard from '../dashboard/Dashboard';
 import Checking from '../checking/Checking';
 import Savings from '../savings/Savings';
-// import Budget from '../budget/Budget';
 import Settings from '../mysettings/Settings';
 import Admin from '../admin/Admin';
-
 import { makeStyles } from '@material-ui/core/styles';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
-// import IconButton from '@material-ui/core/IconButton';
-// import MenuIcon from '@material-ui/icons/Menu';
 
 
 
@@ -40,6 +36,7 @@ class NavBar extends React.Component<NavBarProps, NavBarState> {
 			admin: false,
 		}
 		this.useStyles = this.useStyles.bind(this);
+		this.getData = this.getData.bind(this);
 
 	}
 	useStyles = makeStyles((theme) => ({
@@ -54,6 +51,10 @@ class NavBar extends React.Component<NavBarProps, NavBarState> {
 		},
 	}));
 	componentDidMount = () => {
+		this.getData();
+	}
+
+	getData = () => {
 		fetch('http://localhost:4000/user/name', {
 			method: "GET",
 			headers: new Headers({
@@ -79,7 +80,7 @@ class NavBar extends React.Component<NavBarProps, NavBarState> {
 					<Switch>
 						<Route exact path="/admin"><Admin token={this.props.token} clearToken={this.props.clearToken}/></Route>
 					</Switch>
-				:
+				: null}
 				<Router history={history}>
 					    <AppBar position="fixed" className="myNavBar">
 							<Toolbar>
@@ -103,7 +104,7 @@ class NavBar extends React.Component<NavBarProps, NavBarState> {
 					<Route exact path="/settings"><Settings clearToken={this.props.clearToken} token={this.props.token}/></Route>
 				</Switch>
 				</Router>
-				}
+				
 			</div>
 		)
 	}
