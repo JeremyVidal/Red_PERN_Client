@@ -12,7 +12,6 @@ import Typography from '@material-ui/core/Typography';
 
 interface AdminProps extends WithStyles<typeof styles>{
 	clearToken: any;
-	token: any,
 }
 
 interface AdminState {
@@ -80,6 +79,7 @@ class Admin extends React.Component<AdminProps, AdminState> {
 	}
 
 	componentDidMount = () => {
+		window.scrollTo(0, 0)
 		this.getData();
 	}
 
@@ -87,18 +87,18 @@ class Admin extends React.Component<AdminProps, AdminState> {
 		const {classes} = this.props;
 		return(
 			<div className="wrapper">
-				<h1>This is the Admin Portal!!!</h1>
+				<h1><code>ADMIN PORTAL</code></h1>
 				<Button onClick={this.props.clearToken}>Logout</Button>
 				<Grid container spacing={3}>
 					<Grid item xs={12}>
+						<Typography component="h1" variant="h5"><code>All Users</code></Typography>
 						<TableContainer>
 							<br />
-							<Typography component="h1" variant="h5"><code>All Users</code></Typography>
 							<Table className={classes.table} size="small" aria-label="a dense table">
 								<TableHead>
 									<TableRow>
-										<TableCell>First Name</TableCell>
 										<TableCell>Last Name</TableCell>
+										<TableCell>First Name</TableCell>
 										<TableCell>Email</TableCell>
 										<TableCell></TableCell>
 										<TableCell></TableCell>
@@ -107,8 +107,8 @@ class Admin extends React.Component<AdminProps, AdminState> {
 								<TableBody>
 								{this.state.users.map((data, i) => (
 								<TableRow key={i}>
-									<TableCell>{data.firstName}</TableCell>
 									<TableCell>{data.lastName}</TableCell>
+									<TableCell>{data.firstName}</TableCell>
 									<TableCell>{data.email}</TableCell>
 									<TableCell><Button onClick={(e) => this.deleteUser(e, data.id) } type="submit" variant="contained" color="primary" >Delete</Button></TableCell>
 									<TableCell></TableCell>

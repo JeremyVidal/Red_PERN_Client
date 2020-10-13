@@ -78,7 +78,7 @@ class NavBar extends React.Component<NavBarProps, NavBarState> {
 				{
 				this.state.admin === true ? 
 					<Switch>
-						<Route exact path="/admin"><Admin token={this.props.token} clearToken={this.props.clearToken}/></Route>
+						<Route exact path="/admin"><Admin clearToken={this.props.clearToken}/></Route>
 					</Switch>
 				: null}
 				<Router history={history}>

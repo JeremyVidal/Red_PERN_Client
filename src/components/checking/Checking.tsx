@@ -295,6 +295,7 @@ class Checking extends React.Component<CheckingProps, CheckingState> {
 			})
 	}
 	componentDidMount = () => {
+		window.scrollTo(0, 0)
 		this.getData(this.props.token);
 	}
 	getData = (token: any) => {
@@ -477,9 +478,9 @@ class Checking extends React.Component<CheckingProps, CheckingState> {
 				</form>
 				<Grid container spacing={3}>
 					<Grid item xs={12}>
+						<Typography component="h1" variant="h5">Checking Transactions</Typography>
 						<TableContainer className={classes.tablecontainer} >
 							<br />
-							<Typography component="h1" variant="h5">Checking Transactions</Typography>
 							<Table className={classes.table} size="small" aria-label="a dense table">
 								<TableHead>
 									<TableRow>

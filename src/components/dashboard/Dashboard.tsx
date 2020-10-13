@@ -38,6 +38,7 @@ class Dashboard extends React.Component<DashProps, DashState> {
 	}
 
 	componentDidMount = () => {
+		window.scrollTo(0, 0)
 		fetch('http://localhost:4000/checking', {
 			method: "GET",
 			headers: new Headers({
@@ -71,9 +72,9 @@ class Dashboard extends React.Component<DashProps, DashState> {
 			<div className="wrapper">
 				<Grid container spacing={3}>
 					<Grid item xs={6}>
+						<h2>Checking</h2>
 						<TableContainer className={classes.tablecontainer} >
 							<br />
-							<h2>Checking</h2>
 							<Table className={classes.table} size="small" aria-label="a dense table">
 								<TableHead>
 									<TableRow>
@@ -101,9 +102,9 @@ class Dashboard extends React.Component<DashProps, DashState> {
 						</TableContainer>
 					</Grid>
 					<Grid item xs={6}>
+						<h2>Savings</h2>
 						<TableContainer className={classes.tablecontainer} >
 							<br />
-							<h2>Savings</h2>
 							<Table size="small" aria-label="a dense table">
 								<TableHead>
 									<TableRow>

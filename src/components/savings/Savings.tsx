@@ -295,6 +295,7 @@ class Savings extends React.Component<SavingsProps, SavingsState> {
 			})
 	}
 	componentDidMount = () => {
+		window.scrollTo(0, 0)
 		this.getData(this.props.token);
 	}
 	getData = (token: any) => {
@@ -477,9 +478,9 @@ class Savings extends React.Component<SavingsProps, SavingsState> {
 				</form>
 				<Grid container spacing={3}>
 					<Grid item xs={12}>
+						<Typography component="h1" variant="h5">Savings Transactions</Typography>
 						<TableContainer className={classes.tablecontainer}>
 							<br />
-							<Typography component="h1" variant="h5">Savings Transactions</Typography>
 							<Table className={classes.table} size="small" aria-label="a dense table">
 								<TableHead>
 									<TableRow>

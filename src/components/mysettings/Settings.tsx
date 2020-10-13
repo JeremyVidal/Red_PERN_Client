@@ -375,6 +375,7 @@ class Settings extends React.Component<SettingsProps, SettingsState> {
 	}
 
 	componentDidMount = () => {
+		window.scrollTo(0, 0)
 		this.getUserInfo(this.props.token)
 		this.getBeginBalance(this.props.token)
 		this.getCheckingCatgegories(this.props.token)
