@@ -6,8 +6,8 @@ switch (window.location.hostname) {
     APIURL = "http://localhost:3000";
     break;
 
-  case "jbv-mybudget-tracker-client.herokuapp.com":
-	APIURL = "https://jbv-mybudget-tracker-client.herokuapp.com";
+  case "jbv-mybudget-tracker.herokuapp.com":
+	APIURL = "https://jbv-mybudget-tracker.herokuapp.com";
     break;
 	
 	default: 
