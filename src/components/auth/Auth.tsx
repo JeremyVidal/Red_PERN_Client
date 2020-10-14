@@ -43,12 +43,13 @@ interface AuthProps extends WithStyles<typeof styles> {
  function Copyright() {
 	return (
 	  	<Typography variant="body2" color="textSecondary" align="center">
-			{'Copyright © '}
-			<Link color="inherit" href="https://material-ui.com/">
-		  		Arcane LLC
-			</Link>{' '}
+			{'Copyright © '}&nbsp; Arcane LLC {' '}
 			{new Date().getFullYear()}
 			{'.'}
+			<br /><br />
+			<Link color="inherit" href="https://documenter.getpostman.com/view/9337021/TVRoZ7Bz#4a6ceab6-67a9-4890-858d-b3d6d63df5b3">
+		  		API Documentation
+			</Link>
 	  	</Typography>
 	);
   }
