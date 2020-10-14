@@ -39,7 +39,7 @@ class Dashboard extends React.Component<DashProps, DashState> {
 
 	componentDidMount = () => {
 		window.scrollTo(0, 0)
-		fetch('http://localhost:4000/checking', {
+		fetch('http://localhost:3000/checking', {
 			method: "GET",
 			headers: new Headers({
 				"Authorization": this.props.token,
@@ -52,7 +52,7 @@ class Dashboard extends React.Component<DashProps, DashState> {
 			this.setState({checking: [ ...this.state.checking, ...data ]})			  
 		})
 		
-		fetch('http://localhost:4000/savings', {
+		fetch('http://localhost:3000/savings', {
 			method: "GET",
 			headers: new Headers({
 				"Authorization": this.props.token,

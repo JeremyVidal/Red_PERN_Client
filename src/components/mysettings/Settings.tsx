@@ -145,7 +145,7 @@ class Settings extends React.Component<SettingsProps, SettingsState> {
 		let userObject = {
 			checkingCategory: this.state.checkingCategory,
 		};
-		fetch('http://localhost:4000/checkingCategories/create', {
+		fetch('http://localhost:3000/checkingCategories/create', {
 			method: "POST",
 			headers: new Headers({
 				"Content-Type": "application/json",
@@ -163,7 +163,7 @@ class Settings extends React.Component<SettingsProps, SettingsState> {
 		let userObject = {
 			savingsCategory: this.state.savingsCategory,
 		};
-		fetch('http://localhost:4000/savingsCategories/create', {
+		fetch('http://localhost:3000/savingsCategories/create', {
 			method: "POST",
 			headers: new Headers({
 				"Content-Type": "application/json",
@@ -182,7 +182,7 @@ class Settings extends React.Component<SettingsProps, SettingsState> {
 		let userObject = {
 			checkingType: this.state.checkingType,
 		};
-		fetch('http://localhost:4000/checkingTypes/create', {
+		fetch('http://localhost:3000/checkingTypes/create', {
 			method: "POST",
 			headers: new Headers({
 				"Content-Type": "application/json",
@@ -200,7 +200,7 @@ class Settings extends React.Component<SettingsProps, SettingsState> {
 		let userObject = {
 			savingsType: this.state.savingsType,
 		};
-		fetch('http://localhost:4000/savingsTypes/create', {
+		fetch('http://localhost:3000/savingsTypes/create', {
 			method: "POST",
 			headers: new Headers({
 				"Content-Type": "application/json",
@@ -216,7 +216,7 @@ class Settings extends React.Component<SettingsProps, SettingsState> {
 	deleteSavingsTypes = (event:any, id:number) => {
 		event.preventDefault();
 		this.setState({open: false});
-		fetch(`http://localhost:4000/savingsTypes/${id}`, {
+		fetch(`http://localhost:3000/savingsTypes/${id}`, {
 			method: 'DELETE',
 			headers: new Headers({
 				'Content-Type': 'application/json',
@@ -230,7 +230,7 @@ class Settings extends React.Component<SettingsProps, SettingsState> {
 	deleteCheckingTypes = (event:any, id:number) => {
 		event.preventDefault();
 		this.setState({open: false});
-		fetch(`http://localhost:4000/checkingTypes/${id}`, {
+		fetch(`http://localhost:3000/checkingTypes/${id}`, {
 			method: 'DELETE',
 			headers: new Headers({
 				'Content-Type': 'application/json',
@@ -244,7 +244,7 @@ class Settings extends React.Component<SettingsProps, SettingsState> {
 	deleteSavingsCategory = (event:any, id:number) => {
 		event.preventDefault();
 		this.setState({open: false});
-		fetch(`http://localhost:4000/savingsCategories/${id}`, {
+		fetch(`http://localhost:3000/savingsCategories/${id}`, {
 			method: 'DELETE',
 			headers: new Headers({
 				'Content-Type': 'application/json',
@@ -258,7 +258,7 @@ class Settings extends React.Component<SettingsProps, SettingsState> {
 	deleteCheckingCategory = (event:any, id:number) => {
 		event.preventDefault();
 		this.setState({open: false});
-		fetch(`http://localhost:4000/checkingCategories/${id}`, {
+		fetch(`http://localhost:3000/checkingCategories/${id}`, {
 			method: 'DELETE',
 			headers: new Headers({
 				'Content-Type': 'application/json',
@@ -281,7 +281,7 @@ class Settings extends React.Component<SettingsProps, SettingsState> {
 	handleDelete = (event:any) => {
 		event.preventDefault();
 		this.setState({open: false});
-		fetch('http://localhost:4000/user', {
+		fetch('http://localhost:3000/user', {
 			method: 'DELETE',
 			headers: new Headers({
 				'Content-Type': 'application/json',
@@ -319,7 +319,7 @@ class Settings extends React.Component<SettingsProps, SettingsState> {
 		  	(val) => val.length > 0 && (valid = false)
 		);
 		if(valid === true){
-			fetch('http://localhost:4000/user', {
+			fetch('http://localhost:3000/user', {
 				method: "PUT",
 				body: JSON.stringify({						
 					firstName: this.state.firstName,
@@ -335,7 +335,7 @@ class Settings extends React.Component<SettingsProps, SettingsState> {
 				})
 			.then((response) => response.json())
 
-			fetch('http://localhost:4000/beginBalance/update', {
+			fetch('http://localhost:3000/beginBalance/update', {
 				method: "PUT",
 				body: JSON.stringify({						
 					checking: this.state.beginCheckingAmount,
@@ -385,7 +385,7 @@ class Settings extends React.Component<SettingsProps, SettingsState> {
 	}
 
 	getUserInfo = (token:any) => {
-		fetch('http://localhost:4000/user', {
+		fetch('http://localhost:3000/user', {
 			method: "GET",
 			headers: new Headers({
 				"Content-Type": "application/json",
@@ -400,7 +400,7 @@ class Settings extends React.Component<SettingsProps, SettingsState> {
 		})
 	}
 	getBeginBalance = (token:any) => {
-		fetch('http://localhost:4000/beginBalance', {
+		fetch('http://localhost:3000/beginBalance', {
 			method: "GET",
 			headers: new Headers({
 				"Content-Type": "application/json",
@@ -414,7 +414,7 @@ class Settings extends React.Component<SettingsProps, SettingsState> {
 		})
 	}
 	getCheckingCatgegories = (token:any) => {
-		fetch('http://localhost:4000/checkingCategories/', {
+		fetch('http://localhost:3000/checkingCategories/', {
 			method: "GET",
 			headers: new Headers({
 				"Authorization": token,
@@ -428,7 +428,7 @@ class Settings extends React.Component<SettingsProps, SettingsState> {
 		})
 	}
 	getCheckingTypes = (token:any) => {
-		fetch('http://localhost:4000/checkingTypes/', {
+		fetch('http://localhost:3000/checkingTypes/', {
 			method: "GET",
 			headers: new Headers({
 				"Authorization": token,
@@ -443,7 +443,7 @@ class Settings extends React.Component<SettingsProps, SettingsState> {
 		})
 	}
 	getSavingsCatgegories = (token:any) => {
-		fetch('http://localhost:4000/savingsCategories/', {
+		fetch('http://localhost:3000/savingsCategories/', {
 			method: "GET",
 			headers: new Headers({
 				"Authorization": token,
@@ -458,7 +458,7 @@ class Settings extends React.Component<SettingsProps, SettingsState> {
 	}
 	
 	getSavingsTypes = (token:any) => {
-		fetch('http://localhost:4000/savingsTypes/', {
+		fetch('http://localhost:3000/savingsTypes/', {
 			method: "GET",
 			headers: new Headers({
 				"Authorization": token,
