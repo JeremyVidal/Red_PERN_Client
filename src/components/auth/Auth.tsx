@@ -47,7 +47,7 @@ interface AuthProps extends WithStyles<typeof styles> {
 			{new Date().getFullYear()}
 			{'.'}
 			<br /><br />
-			<Link color="inherit" href="https://documenter.getpostman.com/view/9337021/TVRoZ7Bz#4a6ceab6-67a9-4890-858d-b3d6d63df5b3">
+			<Link color="inherit" target="_blank" href="https://documenter.getpostman.com/view/9337021/TVRoZ7Bz#4a6ceab6-67a9-4890-858d-b3d6d63df5b3">
 		  		API Documentation
 			</Link>
 	  	</Typography>
