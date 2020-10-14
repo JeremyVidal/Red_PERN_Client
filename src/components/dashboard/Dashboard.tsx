@@ -10,11 +10,9 @@ import { withStyles, createStyles, WithStyles, Theme } from '@material-ui/core/s
 
 
 interface DashProps extends WithStyles<typeof styles> {
-	userid: number,
 	token: string,
 }
 interface DashState {
-	user_id: any,
 	checking: any[], 
 	savings: any[], 
 	
@@ -22,21 +20,25 @@ interface DashState {
 
 const styles = ({ palette, spacing}: Theme) => createStyles({
 	table: {
-	minWidth: 650,
+		minWidth: 650,
 	},
+	tablecontainer: {
+		maxHeight: 500,
+		overflowY: 'scroll',
+	}
 });
 
 class Dashboard extends React.Component<DashProps, DashState> {
 	constructor(props: DashProps){
 		super(props);
 		this.state = {
-			user_id: 0, // ??????? how to set this to be defaulted to the incoming prop
 			checking: [],
 			savings: [],
 		}
 	}
 
 	componentDidMount = () => {
+		window.scrollTo(0, 0)
 		fetch('http://localhost:4000/checking', {
 			method: "GET",
 			headers: new Headers({
@@ -47,7 +49,6 @@ class Dashboard extends React.Component<DashProps, DashState> {
 		.then((res) => res.json())
 		.then((data) => {
 			// console.log(data);
-			this.setState({user_id: this.props.userid})
 			this.setState({checking: [ ...this.state.checking, ...data ]})			  
 		})
 		
@@ -68,12 +69,12 @@ class Dashboard extends React.Component<DashProps, DashState> {
 	render(){
 		const {classes} = this.props;
 		return(
-			<div>
+			<div className="wrapper">
 				<Grid container spacing={3}>
 					<Grid item xs={6}>
-						<TableContainer>
+						<h2>Checking</h2>
+						<TableContainer className={classes.tablecontainer} >
 							<br />
-							<h2>Checking</h2>
 							<Table className={classes.table} size="small" aria-label="a dense table">
 								<TableHead>
 									<TableRow>
@@ -82,7 +83,6 @@ class Dashboard extends React.Component<DashProps, DashState> {
 										<TableCell>Category</TableCell>
 										<TableCell>Type</TableCell>
 										<TableCell>Name</TableCell>
-										<TableCell>Description</TableCell>
 										<TableCell>Amount</TableCell>
 									</TableRow>
 								</TableHead>
@@ -94,7 +94,6 @@ class Dashboard extends React.Component<DashProps, DashState> {
 										<TableCell>{data.checkingCategory}</TableCell>
 										<TableCell>{data.checkingType}</TableCell>
 										<TableCell>{data.checkingName}</TableCell>
-										<TableCell>{data.checkingDescription}</TableCell>
 										<TableCell>${data.checkingAmount}</TableCell>
 									</TableRow>
 									))}	
@@ -103,9 +102,9 @@ class Dashboard extends React.Component<DashProps, DashState> {
 						</TableContainer>
 					</Grid>
 					<Grid item xs={6}>
-						<TableContainer>
+						<h2>Savings</h2>
+						<TableContainer className={classes.tablecontainer} >
 							<br />
-							<h2>Savings</h2>
 							<Table size="small" aria-label="a dense table">
 								<TableHead>
 									<TableRow>
@@ -114,7 +113,6 @@ class Dashboard extends React.Component<DashProps, DashState> {
 										<TableCell>Category</TableCell>
 										<TableCell>Type</TableCell>
 										<TableCell>Name</TableCell>
-										<TableCell>Description</TableCell>
 										<TableCell>Amount</TableCell>
 									</TableRow>
 								</TableHead>
@@ -126,7 +124,6 @@ class Dashboard extends React.Component<DashProps, DashState> {
 										<TableCell>{data.savingsCategory}</TableCell>
 										<TableCell>{data.savingsType}</TableCell>
 										<TableCell>{data.savingsName}</TableCell>
-										<TableCell>{data.savingsDescription}</TableCell>
 										<TableCell>${data.savingsAmount}</TableCell>
 									</TableRow>
 									))}	
