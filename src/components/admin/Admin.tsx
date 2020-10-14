@@ -9,6 +9,7 @@ import Grid from '@material-ui/core/Grid';
 import { withStyles, createStyles, WithStyles, Theme } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
+import APIURL from "../../helpers/environment";
 
 interface AdminProps extends WithStyles<typeof styles>{
 	clearToken: any;
@@ -49,7 +50,7 @@ class Admin extends React.Component<AdminProps, AdminState> {
 
 	deleteUser = (event:any, id:number) => {
 		event.preventDefault();
-		fetch(`http://localhost:3000/user/${id}`, {
+		fetch(`${APIURL}/user/${id}`, {
 			method: 'DELETE',
 			headers: new Headers({
 				'Content-Type': 'application/json',
@@ -65,7 +66,7 @@ class Admin extends React.Component<AdminProps, AdminState> {
 
 	}
 	getData =() => {
-		fetch('http://localhost:3000/user/all', {
+		fetch(`${APIURL}/user/all`, {
 			method: 'GET',
 			headers: new Headers({
 				'Content-Type': 'application/json'

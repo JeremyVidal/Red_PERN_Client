@@ -11,6 +11,7 @@ import Typography from '@material-ui/core/Typography';
 import Container from '@material-ui/core/Container';
 import Link from '@material-ui/core/Link';
 import Box from '@material-ui/core/Box';
+import APIURL from "../../helpers/environment";
 
 const Regex = RegExp(/^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/);
 
@@ -167,8 +168,8 @@ class Auth extends React.Component<AuthProps, AuthState> {
 				password: this.state.password,
 			};
 			let url = this.state.login === true 
-			? 'http://localhost:3000/user/login'
-			: 'http://localhost:3000/user/signup';
+			? `${APIURL}/user/login`
+			: `${APIURL}/user/signup`;
 			fetch(url, {
 				method: "POST",
 				headers: new Headers({
@@ -183,7 +184,7 @@ class Auth extends React.Component<AuthProps, AuthState> {
 					checking: this.state.beginCheckingAmount,
 					savings: this.state.beginSavingsAmount,
 				};
-				fetch('http://localhost:3000/beginBalance/create', {
+				fetch(`${APIURL}/beginBalance/create`, {
 					method: "POST",
 					headers: new Headers({
 						"Authorization": data.sessionToken,

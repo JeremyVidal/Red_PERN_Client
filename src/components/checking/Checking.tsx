@@ -17,6 +17,7 @@ import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
+import APIURL from "../../helpers/environment";
 
 interface CheckingProps extends WithStyles<typeof styles>{
 	token: string,
@@ -116,7 +117,7 @@ class Checking extends React.Component<CheckingProps, CheckingState> {
 	handleUpdateSubmit = (event:any, id:number) => {
 		event.preventDefault();
 		// console.log(this.state.editCheckingName);
-		fetch(`http://localhost:3000/checking/update/${id}`, {
+		fetch(`${APIURL}/checking/update/${id}`, {
 			method: "PUT",
 			body: JSON.stringify({						
 				checkingDate: this.state.editCheckingDate,
@@ -139,7 +140,7 @@ class Checking extends React.Component<CheckingProps, CheckingState> {
 		})
 	}
 	getEditData = (id:number) => {
-		fetch(`http://localhost:3000/checking/${id}`, {
+		fetch(`${APIURL}/checking/${id}`, {
 			method: "GET",
 			headers: new Headers({
 				"Authorization": this.props.token,
@@ -161,7 +162,7 @@ class Checking extends React.Component<CheckingProps, CheckingState> {
 	}
 
 	handleEditUpdate =(id:number) => {
-		fetch(`http://localhost:3000/checking/update/${id}`, {
+		fetch(`${APIURL}/checking/update/${id}`, {
 			method: "PUT",
 			body: JSON.stringify({		
 				checkingDate: this.state.editCheckingDate,
@@ -215,7 +216,7 @@ class Checking extends React.Component<CheckingProps, CheckingState> {
 	deleteRecord = (event:any, id:number) => {
 		event.preventDefault();
 		if (id){
-			let url = `http://localhost:3000/checking/${id}`;
+			let url = `${APIURL}/checking/${id}`;
 			fetch(url, {
 				method: 'DELETE',
 				headers: new Headers({
@@ -266,7 +267,7 @@ class Checking extends React.Component<CheckingProps, CheckingState> {
 
 	handleSubmit = (event:any) => {
 		event.preventDefault();
-		fetch('http://localhost:3000/checking/create', {
+		fetch(`${APIURL}/checking/create`, {
 			method: "POST",
 			body: JSON.stringify({
 				checkingDate: this.state.checkingDate,
@@ -299,7 +300,7 @@ class Checking extends React.Component<CheckingProps, CheckingState> {
 		this.getData(this.props.token);
 	}
 	getData = (token: any) => {
-		fetch('http://localhost:3000/checkingCategories/', {
+		fetch(`${APIURL}/checkingCategories/`, {
 			method: "GET",
 			headers: new Headers({
 				"Authorization": token,
@@ -311,7 +312,7 @@ class Checking extends React.Component<CheckingProps, CheckingState> {
 			// console.log(data);
 			this.setState({categories: data})			  
 		})
-		fetch('http://localhost:3000/checkingTypes/', {
+		fetch(`${APIURL}/checkingTypes/`, {
 			method: "GET",
 			headers: new Headers({
 				"Authorization": token,
@@ -324,7 +325,7 @@ class Checking extends React.Component<CheckingProps, CheckingState> {
 			this.setState({types: data})			  
 
 		})
-		fetch('http://localhost:3000/checking', {
+		fetch(`${APIURL}/checking`, {
 			method: "GET",
 			headers: new Headers({
 				"Authorization": token,

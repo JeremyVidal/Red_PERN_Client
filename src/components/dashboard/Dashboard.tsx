@@ -7,6 +7,7 @@ import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import Grid from '@material-ui/core/Grid';
 import { withStyles, createStyles, WithStyles, Theme } from '@material-ui/core/styles';
+import APIURL from "../../helpers/environment";
 
 
 interface DashProps extends WithStyles<typeof styles> {
@@ -39,7 +40,7 @@ class Dashboard extends React.Component<DashProps, DashState> {
 
 	componentDidMount = () => {
 		window.scrollTo(0, 0)
-		fetch('http://localhost:3000/checking', {
+		fetch(`${APIURL}/checking`, {
 			method: "GET",
 			headers: new Headers({
 				"Authorization": this.props.token,
@@ -52,7 +53,7 @@ class Dashboard extends React.Component<DashProps, DashState> {
 			this.setState({checking: [ ...this.state.checking, ...data ]})			  
 		})
 		
-		fetch('http://localhost:3000/savings', {
+		fetch(`${APIURL}/savings`, {
 			method: "GET",
 			headers: new Headers({
 				"Authorization": this.props.token,

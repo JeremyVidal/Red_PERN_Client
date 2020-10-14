@@ -11,6 +11,7 @@ import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
+import APIURL from "../../helpers/environment";
 
 
 
@@ -62,7 +63,7 @@ class NavBar extends React.Component<NavBarProps, NavBarState> {
 	}
 
 	getData = () => {
-		fetch('http://localhost:3000/user/name', {
+		fetch(`${APIURL}/user/name`, {
 			method: "GET",
 			headers: new Headers({
 				"Authorization": this.props.token,

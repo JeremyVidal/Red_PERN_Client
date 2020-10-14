@@ -17,6 +17,7 @@ import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
+import APIURL from "../../helpers/environment";
 
 interface SavingsProps extends WithStyles<typeof styles>{
 	token: string,
@@ -116,7 +117,7 @@ class Savings extends React.Component<SavingsProps, SavingsState> {
 	handleUpdateSubmit = (event:any, id:number) => {
 		event.preventDefault();
 		// console.log(this.state.editCheckingName);
-		fetch(`http://localhost:3000/savings/update/${id}`, {
+		fetch(`${APIURL}/savings/update/${id}`, {
 			method: "PUT",
 			body: JSON.stringify({						
 				savingsDate: this.state.editSavingsDate,
@@ -139,7 +140,7 @@ class Savings extends React.Component<SavingsProps, SavingsState> {
 		})
 	}
 	getEditData = (id:number) => {
-		fetch(`http://localhost:3000/savings/${id}`, {
+		fetch(`${APIURL}/savings/${id}`, {
 			method: "GET",
 			headers: new Headers({
 				"Authorization": this.props.token,
@@ -161,7 +162,7 @@ class Savings extends React.Component<SavingsProps, SavingsState> {
 	}
 
 	handleEditUpdate =(id:number) => {
-		fetch(`http://localhost:3000/savings/update/${id}`, {
+		fetch(`${APIURL}/savings/update/${id}`, {
 			method: "PUT",
 			body: JSON.stringify({		
 				savingsDate: this.state.editSavingsDate,
@@ -215,7 +216,7 @@ class Savings extends React.Component<SavingsProps, SavingsState> {
 	deleteRecord = (event:any, id:number) => {
 		event.preventDefault();
 		if (id){
-			let url = `http://localhost:3000/savings/${id}`;
+			let url = `${APIURL}/savings/${id}`;
 			fetch(url, {
 				method: 'DELETE',
 				headers: new Headers({
@@ -266,7 +267,7 @@ class Savings extends React.Component<SavingsProps, SavingsState> {
 
 	handleSubmit = (event:any) => {
 		event.preventDefault();
-		fetch('http://localhost:3000/savings/create', {
+		fetch(`${APIURL}/savings/create`, {
 			method: "POST",
 			body: JSON.stringify({
 				savingsDate: this.state.savingsDate,
@@ -299,7 +300,7 @@ class Savings extends React.Component<SavingsProps, SavingsState> {
 		this.getData(this.props.token);
 	}
 	getData = (token: any) => {
-		fetch('http://localhost:3000/savingsCategories/', {
+		fetch(`${APIURL}/savingsCategories/`, {
 			method: "GET",
 			headers: new Headers({
 				"Authorization": token,
@@ -311,7 +312,7 @@ class Savings extends React.Component<SavingsProps, SavingsState> {
 			// console.log(data);
 			this.setState({categories: data})			  
 		})
-		fetch('http://localhost:3000/savingsTypes/', {
+		fetch(`${APIURL}/savingsTypes/`, {
 			method: "GET",
 			headers: new Headers({
 				"Authorization": token,
@@ -324,7 +325,7 @@ class Savings extends React.Component<SavingsProps, SavingsState> {
 			this.setState({types: data})			  
 
 		})
-		fetch('http://localhost:3000/savings', {
+		fetch(`${APIURL}/savings`, {
 			method: "GET",
 			headers: new Headers({
 				"Authorization": token,

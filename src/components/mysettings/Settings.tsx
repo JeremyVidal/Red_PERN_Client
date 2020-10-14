@@ -17,6 +17,7 @@ import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
+import APIURL from "../../helpers/environment";
 
 const Regex = RegExp(/^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/);
 
@@ -145,7 +146,7 @@ class Settings extends React.Component<SettingsProps, SettingsState> {
 		let userObject = {
 			checkingCategory: this.state.checkingCategory,
 		};
-		fetch('http://localhost:3000/checkingCategories/create', {
+		fetch(`${APIURL}/checkingCategories/create`, {
 			method: "POST",
 			headers: new Headers({
 				"Content-Type": "application/json",
@@ -163,7 +164,7 @@ class Settings extends React.Component<SettingsProps, SettingsState> {
 		let userObject = {
 			savingsCategory: this.state.savingsCategory,
 		};
-		fetch('http://localhost:3000/savingsCategories/create', {
+		fetch(`${APIURL}/savingsCategories/create`, {
 			method: "POST",
 			headers: new Headers({
 				"Content-Type": "application/json",
@@ -182,7 +183,7 @@ class Settings extends React.Component<SettingsProps, SettingsState> {
 		let userObject = {
 			checkingType: this.state.checkingType,
 		};
-		fetch('http://localhost:3000/checkingTypes/create', {
+		fetch(`${APIURL}/checkingTypes/create`, {
 			method: "POST",
 			headers: new Headers({
 				"Content-Type": "application/json",
@@ -200,7 +201,7 @@ class Settings extends React.Component<SettingsProps, SettingsState> {
 		let userObject = {
 			savingsType: this.state.savingsType,
 		};
-		fetch('http://localhost:3000/savingsTypes/create', {
+		fetch(`${APIURL}/savingsTypes/create`, {
 			method: "POST",
 			headers: new Headers({
 				"Content-Type": "application/json",
@@ -216,7 +217,7 @@ class Settings extends React.Component<SettingsProps, SettingsState> {
 	deleteSavingsTypes = (event:any, id:number) => {
 		event.preventDefault();
 		this.setState({open: false});
-		fetch(`http://localhost:3000/savingsTypes/${id}`, {
+		fetch(`${APIURL}/savingsTypes/${id}`, {
 			method: 'DELETE',
 			headers: new Headers({
 				'Content-Type': 'application/json',
@@ -230,7 +231,7 @@ class Settings extends React.Component<SettingsProps, SettingsState> {
 	deleteCheckingTypes = (event:any, id:number) => {
 		event.preventDefault();
 		this.setState({open: false});
-		fetch(`http://localhost:3000/checkingTypes/${id}`, {
+		fetch(`${APIURL}/checkingTypes/${id}`, {
 			method: 'DELETE',
 			headers: new Headers({
 				'Content-Type': 'application/json',
@@ -244,7 +245,7 @@ class Settings extends React.Component<SettingsProps, SettingsState> {
 	deleteSavingsCategory = (event:any, id:number) => {
 		event.preventDefault();
 		this.setState({open: false});
-		fetch(`http://localhost:3000/savingsCategories/${id}`, {
+		fetch(`${APIURL}/savingsCategories/${id}`, {
 			method: 'DELETE',
 			headers: new Headers({
 				'Content-Type': 'application/json',
@@ -258,7 +259,7 @@ class Settings extends React.Component<SettingsProps, SettingsState> {
 	deleteCheckingCategory = (event:any, id:number) => {
 		event.preventDefault();
 		this.setState({open: false});
-		fetch(`http://localhost:3000/checkingCategories/${id}`, {
+		fetch(`${APIURL}/checkingCategories/${id}`, {
 			method: 'DELETE',
 			headers: new Headers({
 				'Content-Type': 'application/json',
@@ -281,7 +282,7 @@ class Settings extends React.Component<SettingsProps, SettingsState> {
 	handleDelete = (event:any) => {
 		event.preventDefault();
 		this.setState({open: false});
-		fetch('http://localhost:3000/user', {
+		fetch(`${APIURL}/user`, {
 			method: 'DELETE',
 			headers: new Headers({
 				'Content-Type': 'application/json',
@@ -319,7 +320,7 @@ class Settings extends React.Component<SettingsProps, SettingsState> {
 		  	(val) => val.length > 0 && (valid = false)
 		);
 		if(valid === true){
-			fetch('http://localhost:3000/user', {
+			fetch(`${APIURL}/user`, {
 				method: "PUT",
 				body: JSON.stringify({						
 					firstName: this.state.firstName,
@@ -335,7 +336,7 @@ class Settings extends React.Component<SettingsProps, SettingsState> {
 				})
 			.then((response) => response.json())
 
-			fetch('http://localhost:3000/beginBalance/update', {
+			fetch(`${APIURL}/beginBalance/update`, {
 				method: "PUT",
 				body: JSON.stringify({						
 					checking: this.state.beginCheckingAmount,
@@ -385,7 +386,7 @@ class Settings extends React.Component<SettingsProps, SettingsState> {
 	}
 
 	getUserInfo = (token:any) => {
-		fetch('http://localhost:3000/user', {
+		fetch(`${APIURL}/user`, {
 			method: "GET",
 			headers: new Headers({
 				"Content-Type": "application/json",
@@ -400,7 +401,7 @@ class Settings extends React.Component<SettingsProps, SettingsState> {
 		})
 	}
 	getBeginBalance = (token:any) => {
-		fetch('http://localhost:3000/beginBalance', {
+		fetch(`${APIURL}/beginBalance`, {
 			method: "GET",
 			headers: new Headers({
 				"Content-Type": "application/json",
@@ -414,7 +415,7 @@ class Settings extends React.Component<SettingsProps, SettingsState> {
 		})
 	}
 	getCheckingCatgegories = (token:any) => {
-		fetch('http://localhost:3000/checkingCategories/', {
+		fetch(`${APIURL}/checkingCategories/`, {
 			method: "GET",
 			headers: new Headers({
 				"Authorization": token,
@@ -428,7 +429,7 @@ class Settings extends React.Component<SettingsProps, SettingsState> {
 		})
 	}
 	getCheckingTypes = (token:any) => {
-		fetch('http://localhost:3000/checkingTypes/', {
+		fetch(`${APIURL}/checkingTypes/`, {
 			method: "GET",
 			headers: new Headers({
 				"Authorization": token,
@@ -443,7 +444,7 @@ class Settings extends React.Component<SettingsProps, SettingsState> {
 		})
 	}
 	getSavingsCatgegories = (token:any) => {
-		fetch('http://localhost:3000/savingsCategories/', {
+		fetch(`${APIURL}/savingsCategories/`, {
 			method: "GET",
 			headers: new Headers({
 				"Authorization": token,
@@ -458,7 +459,7 @@ class Settings extends React.Component<SettingsProps, SettingsState> {
 	}
 	
 	getSavingsTypes = (token:any) => {
-		fetch('http://localhost:3000/savingsTypes/', {
+		fetch(`${APIURL}/savingsTypes/`, {
 			method: "GET",
 			headers: new Headers({
 				"Authorization": token,
