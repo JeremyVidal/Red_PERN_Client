@@ -62,7 +62,7 @@ class NavBar extends React.Component<NavBarProps, NavBarState> {
 	}
 
 	getData = () => {
-		fetch('http://localhost:4000/user/name', {
+		fetch('http://localhost:3000/user/name', {
 			method: "GET",
 			headers: new Headers({
 				"Authorization": this.props.token,

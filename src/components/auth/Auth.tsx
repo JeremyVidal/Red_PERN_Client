@@ -167,8 +167,8 @@ class Auth extends React.Component<AuthProps, AuthState> {
 				password: this.state.password,
 			};
 			let url = this.state.login === true 
-			? 'http://localhost:4000/user/login'
-			: 'http://localhost:4000/user/signup';
+			? 'http://localhost:3000/user/login'
+			: 'http://localhost:3000/user/signup';
 			fetch(url, {
 				method: "POST",
 				headers: new Headers({
@@ -183,7 +183,7 @@ class Auth extends React.Component<AuthProps, AuthState> {
 					checking: this.state.beginCheckingAmount,
 					savings: this.state.beginSavingsAmount,
 				};
-				fetch('http://localhost:4000/beginBalance/create', {
+				fetch('http://localhost:3000/beginBalance/create', {
 					method: "POST",
 					headers: new Headers({
 						"Authorization": data.sessionToken,

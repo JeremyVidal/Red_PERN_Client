@@ -49,7 +49,7 @@ class Admin extends React.Component<AdminProps, AdminState> {
 
 	deleteUser = (event:any, id:number) => {
 		event.preventDefault();
-		fetch(`http://localhost:4000/user/${id}`, {
+		fetch(`http://localhost:3000/user/${id}`, {
 			method: 'DELETE',
 			headers: new Headers({
 				'Content-Type': 'application/json',
@@ -65,7 +65,7 @@ class Admin extends React.Component<AdminProps, AdminState> {
 
 	}
 	getData =() => {
-		fetch('http://localhost:4000/user/all', {
+		fetch('http://localhost:3000/user/all', {
 			method: 'GET',
 			headers: new Headers({
 				'Content-Type': 'application/json'

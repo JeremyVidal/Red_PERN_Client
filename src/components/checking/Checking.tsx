@@ -116,7 +116,7 @@ class Checking extends React.Component<CheckingProps, CheckingState> {
 	handleUpdateSubmit = (event:any, id:number) => {
 		event.preventDefault();
 		// console.log(this.state.editCheckingName);
-		fetch(`http://localhost:4000/checking/update/${id}`, {
+		fetch(`http://localhost:3000/checking/update/${id}`, {
 			method: "PUT",
 			body: JSON.stringify({						
 				checkingDate: this.state.editCheckingDate,
@@ -139,7 +139,7 @@ class Checking extends React.Component<CheckingProps, CheckingState> {
 		})
 	}
 	getEditData = (id:number) => {
-		fetch(`http://localhost:4000/checking/${id}`, {
+		fetch(`http://localhost:3000/checking/${id}`, {
 			method: "GET",
 			headers: new Headers({
 				"Authorization": this.props.token,
@@ -161,7 +161,7 @@ class Checking extends React.Component<CheckingProps, CheckingState> {
 	}
 
 	handleEditUpdate =(id:number) => {
-		fetch(`http://localhost:4000/checking/update/${id}`, {
+		fetch(`http://localhost:3000/checking/update/${id}`, {
 			method: "PUT",
 			body: JSON.stringify({		
 				checkingDate: this.state.editCheckingDate,
@@ -215,7 +215,7 @@ class Checking extends React.Component<CheckingProps, CheckingState> {
 	deleteRecord = (event:any, id:number) => {
 		event.preventDefault();
 		if (id){
-			let url = `http://localhost:4000/checking/${id}`;
+			let url = `http://localhost:3000/checking/${id}`;
 			fetch(url, {
 				method: 'DELETE',
 				headers: new Headers({
@@ -266,7 +266,7 @@ class Checking extends React.Component<CheckingProps, CheckingState> {
 
 	handleSubmit = (event:any) => {
 		event.preventDefault();
-		fetch('http://localhost:4000/checking/create', {
+		fetch('http://localhost:3000/checking/create', {
 			method: "POST",
 			body: JSON.stringify({
 				checkingDate: this.state.checkingDate,
@@ -299,7 +299,7 @@ class Checking extends React.Component<CheckingProps, CheckingState> {
 		this.getData(this.props.token);
 	}
 	getData = (token: any) => {
-		fetch('http://localhost:4000/checkingCategories/', {
+		fetch('http://localhost:3000/checkingCategories/', {
 			method: "GET",
 			headers: new Headers({
 				"Authorization": token,
@@ -311,7 +311,7 @@ class Checking extends React.Component<CheckingProps, CheckingState> {
 			// console.log(data);
 			this.setState({categories: data})			  
 		})
-		fetch('http://localhost:4000/checkingTypes/', {
+		fetch('http://localhost:3000/checkingTypes/', {
 			method: "GET",
 			headers: new Headers({
 				"Authorization": token,
@@ -324,7 +324,7 @@ class Checking extends React.Component<CheckingProps, CheckingState> {
 			this.setState({types: data})			  
 
 		})
-		fetch('http://localhost:4000/checking', {
+		fetch('http://localhost:3000/checking', {
 			method: "GET",
 			headers: new Headers({
 				"Authorization": token,
