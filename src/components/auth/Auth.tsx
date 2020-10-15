@@ -43,7 +43,7 @@ interface AuthProps extends WithStyles<typeof styles> {
  function Copyright() {
 	return (
 	  	<Typography variant="body2" color="textSecondary" align="center">
-			{'Copyright © '}&nbsp; Arcane LLC {' '}
+			{'Copyright © '} Arcane LLC {' '}
 			{new Date().getFullYear()}
 			{'.'}
 			<br /><br />
